@@ -15,7 +15,7 @@ class DeviseCreateUsers < ActiveRecord::Migration[8.0]
       t.datetime :reset_password_sent_at
 
       ## Rememberable
-      t.datetime :remember_created_at
+      # t.datetime :remember_created_at
 
       ## Trackable
       # t.integer  :sign_in_count, default: 0, null: false
