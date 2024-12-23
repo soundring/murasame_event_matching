@@ -1,4 +1,6 @@
 class EventGroup < ApplicationRecord
+  belongs_to :user
+
   before_validation :set_default_image_url
 
   def set_default_image_url
