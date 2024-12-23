@@ -1,0 +1,13 @@
+<h2>イベントグループ一覧</h2>
+
+<%= link_to '新規作成', new_event_group_path %>
+
+<% @event_groups.each do |event_group| %>
+  <div>
+    <h3><%= event_group.name %></h3>
+    <p><%= event_group.description %></p>
+    <%= link_to '詳細', event_group %>
+    <%= link_to '編集', edit_event_group_path(event_group) %>
+    <%= link_to '削除', event_group, method: :delete, data: { turbo_method: :delete, turbo_confirm: '削除してよろしいですか?' } %>
+  </div>
+<% end %>
