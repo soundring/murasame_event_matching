@@ -57,7 +57,7 @@ group :development, :test do
   gem "factory_bot_rails", "6.4.4"
   gem "faker", "3.5.1"
 
-  gem 'pry', '0.15.0'
+  gem 'pry', '0.15.2'
 end
 
 group :development do
