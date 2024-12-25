@@ -1,0 +1,33 @@
+<h2>イベントグループの編集</h2>
+
+<%= form_with(model: @event_group, local: true) do |form| %>
+
+  <% if @event_group.errors.any? %>
+    <div>
+      <ul>
+        <% @event_group.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+
+  <div>
+    <%= form.label :name, 'グループ名' %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div>
+    <%= form.label :description, 'グループの説明' %>
+    <%= form.text_area :description %>
+  </div>
+
+  <%# TODO: 画像アップロード %>
+
+  <div>
+    <%= link_to 'キャンセル', event_groups_path %>
+    <%= form.submit '更新' %>
+  </div>
+
+<% end %>

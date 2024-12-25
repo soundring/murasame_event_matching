@@ -14,4 +14,5 @@ Rails.application.routes.draw do
   root "homes#index"
 
   resource :dashboard, only: %i[show]
+  resources :event_groups
 end

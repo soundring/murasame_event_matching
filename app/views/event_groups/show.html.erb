@@ -1,0 +1,10 @@
+<h2>イベントグループの詳細</h2>
+
+<%= link_to '一覧へ戻る', event_groups_path %>
+
+<div>
+  <h3><%= @event_group.name %></h3>
+  <h4>説明<p><%= @event_group.description %></p></h4>
+  <h4>グループ画像</h4>
+  <%= image_tag @event_group.image_url, size: "600x400" %>
+</div>
