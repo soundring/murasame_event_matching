@@ -23,7 +23,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_27_064055) do
 
   create_table "event_groups", force: :cascade do |t|
     t.string "name", null: false
-    t.text "description", null: false
+    t.text "description"
     t.text "image_url", null: false
     t.integer "user_id", null: false
     t.datetime "created_at", null: false

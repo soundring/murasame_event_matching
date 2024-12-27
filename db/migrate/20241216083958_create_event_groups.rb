@@ -2,7 +2,7 @@ class CreateEventGroups < ActiveRecord::Migration[8.0]
   def change
     create_table :event_groups do |t|
       t.string :name, null: false
-      t.text :description, null: false
+      t.text :description
       t.text :image_url, null: false
 
       t.references :user, null: false, foreign_key: true
