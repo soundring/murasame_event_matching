@@ -2,20 +2,23 @@ class EventGroupsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    # TODO: ユーザーが持つイベントグループのみを取得する
     @event_groups = EventGroup.all
   end
 
   def show
     @event_group = EventGroup.find(params[:id])
+    authorize @event_group
   end
 
   def new
     @event_group = EventGroup.new
+    authorize @event_group
   end
 
   def create
     @event_group = EventGroup.new(event_group_params)
+    authorize @event_group
+
     if @event_group.save
       redirect_to event_groups_path
     else
@@ -25,10 +28,13 @@ class EventGroupsController < ApplicationController
 
   def edit
     @event_group = EventGroup.find(params[:id])
+    authorize @event_group
   end
 
   def update
     @event_group = EventGroup.find(params[:id])
+    authorize @event_group
+
     if @event_group.update(event_group_params)
       redirect_to event_group_path(@event_group)
     else
@@ -38,6 +44,8 @@ class EventGroupsController < ApplicationController
 
   def destroy
     @event_group = EventGroup.find(params[:id])
+    authorize @event_group
+
     @event_group.destroy
     redirect_to event_groups_path
   end
