@@ -10,7 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_16_083958) do
+ActiveRecord::Schema[8.0].define(version: 2024_12_27_064055) do
+  create_table "event_group_admins", force: :cascade do |t|
+    t.integer "event_group_id", null: false
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_group_id", "user_id"], name: "index_event_group_admins_on_event_group_id_and_user_id", unique: true
+    t.index ["event_group_id"], name: "index_event_group_admins_on_event_group_id"
+    t.index ["user_id"], name: "index_event_group_admins_on_user_id"
+  end
+
   create_table "event_groups", force: :cascade do |t|
     t.string "name", null: false
     t.text "description", null: false
@@ -35,5 +45,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_16_083958) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "event_group_admins", "event_groups"
+  add_foreign_key "event_group_admins", "users"
   add_foreign_key "event_groups", "users"
 end

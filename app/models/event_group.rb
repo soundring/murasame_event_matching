@@ -1,5 +1,7 @@
 class EventGroup < ApplicationRecord
-  belongs_to :user
+  belongs_to :user # 作成者
+  has_many :event_group_admins, dependent: :destroy
+  has_many :admin_users, through: :event_group_admins, source: :user # 管理者
 
   before_validation :set_default_image_url
 
