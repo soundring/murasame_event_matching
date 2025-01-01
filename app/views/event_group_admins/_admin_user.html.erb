@@ -1,0 +1,18 @@
+<%= turbo_frame_tag "admin_user_#{event_group_admin.id}" do %>
+  <div>
+    <% if flash.now[:alert] %>
+      <div>
+        <%= flash.now[:alert] %>
+      </div>
+    <% end %>
+
+    <div>
+      <%= event_group_admin.user.email %>
+      <%= button_to '削除', 
+              event_group_event_group_admin_path(event_group_admin.event_group_id, event_group_admin.id), 
+              method: :delete, 
+              data: { turbo_confirm: "本当に削除しますか？" } 
+      %>
+    </div>
+  </div>
+<% end %>

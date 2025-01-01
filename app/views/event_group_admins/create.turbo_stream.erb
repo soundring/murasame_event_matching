@@ -1,0 +1,3 @@
+<%= turbo_stream.append "admin_list" do %>
+  <%= render partial: 'admin_user', locals: { event_group_admin: @event_group_admin } %>
+<% end %>

@@ -8,6 +8,13 @@ class EventGroupsController < ApplicationController
   def show
     @event_group = EventGroup.find(params[:id])
     authorize @event_group
+
+    @owner = @event_group.user
+    @admins = @event_group.event_group_admins
+
+    @available_users = User.all.reject do |user|
+      @admins.pluck(:user_id).include?(user.id) || user.id == @owner.id
+    end
   end
 
   def new

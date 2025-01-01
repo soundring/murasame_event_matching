@@ -1,0 +1,13 @@
+<%= turbo_frame_tag 'form' do %>
+  <h3>ユーザー選択</h3>
+  <%= form_with model: event_group_admin, url: event_group_event_group_admins_path(event_group), local: true do |form| %>
+    <%= form.hidden_field :event_group_id, value: event_group.id %>
+    <div>
+      <%# TODO: オーナーとすでに管理者の人は除く %>
+      <%= form.collection_select :user_id, User.all, :id, :email, prompt: true %>
+    </div>
+    <div>
+      <%= form.submit '追加' %>
+    </div>
+  <% end %>
+<% end %>
