@@ -15,7 +15,7 @@ RSpec.describe EventGroup, type: :model do
     it 'nameがなければ無効であること' do
       invalid_event_group = build(:event_group, name: nil, user: user)
       expect(invalid_event_group).not_to be_valid
-      expect(invalid_event_group.errors[:name]).to include("can't be blank")
+      expect(invalid_event_group.errors[:name]).to include("を入力してください。")
     end
   end
 

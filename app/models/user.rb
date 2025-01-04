@@ -6,4 +6,5 @@ class User < ApplicationRecord
 
   has_many :event_groups # 作成したグループ
   has_many :administered_groups, through: :event_group_admins, source: :event_group # 管理者になってるグループ
+  has_many :events, as: :eventable
 end

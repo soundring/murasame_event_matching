@@ -1,0 +1,20 @@
+ja:
+  activerecord:
+    errors:
+      messages:
+        required: "を入力してください。"
+        blank: "を入力してください。"
+        greater_than: "は%{count}より大きい値にしてください。"
+      models:
+        event_group:
+          attributes:
+            blank: "を入力してください。"
+        event:
+          attributes:
+            event_end_at:
+              greater_than: "はイベント開始日時より後の日時にしてください。"
+            recruitment_closed_at:
+              greater_than: "は募集開始日時より後の日時にしてください。"
+            max_participants:
+              not_a_number: "は数値でなければなりません。"
+              greater_than: "は0より大きい値にしてください。"
