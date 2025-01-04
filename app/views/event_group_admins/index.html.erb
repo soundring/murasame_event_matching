@@ -1,0 +1,12 @@
+<h2>管理者管理</h2>
+
+<h3>管理者一覧</h3>
+<%= turbo_frame_tag 'admin_list' do %>
+  <% @event_group_admins.each do |event_group_admin| %>
+    <%= render partial: 'admin_user', locals: { event_group_admin: event_group_admin } %>
+  <% end %>
+<% end %>
+
+<%= link_to '管理者を追加する(モーダル表示にしたい)', new_event_group_event_group_admin_path, data: { turbo_frame: "form" } %>
+
+<%= turbo_frame_tag 'form' %>

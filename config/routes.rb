@@ -14,5 +14,7 @@ Rails.application.routes.draw do
   root "homes#index"
 
   resource :dashboard, only: %i[show]
-  resources :event_groups
+  resources :event_groups do
+    resources :event_group_admins, only: %i[index new create destroy]
+  end
 end
