@@ -2,6 +2,8 @@
 
 <%= link_to '一覧へ戻る', event_groups_path %>
 
+<%= link_to 'イベント一覧', polymorphic_path([@event_group, :events]) %>
+
 <div>
   <h3><%= @event_group.name %></h3>
   <h4>説明<p><%= @event_group.description %></p></h4>

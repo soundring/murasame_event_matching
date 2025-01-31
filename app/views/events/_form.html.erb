@@ -1,0 +1,72 @@
+<%= form_with model: [eventable, event] do |form| %>
+  <% if event.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(event.errors.count, "error") %> 作成に失敗しました:</h2>
+
+      <ul>
+        <% event.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :title %>
+    <%= form.text_field :title, required: true %>
+  </div>
+
+  <div class="field">
+    <%= form.label :subtitle %>
+    <%= form.text_field :subtitle %>
+  </div>
+
+  <div class="field">
+    <%= form.label :description %>
+    <%= form.text_area :description %>
+  </div>
+
+  <div class="field">
+    <%= form.label :image_url %>
+    <%= form.text_field :image_url %>
+  </div>
+
+  <div class="field">
+    <%= form.label :event_start_at %>
+    <%= form.datetime_local_field :event_start_at, required: true %>
+  </div>
+
+  <div class="field">
+    <%= form.label :event_end_at %>
+    <%= form.datetime_local_field :event_end_at, required: true %>
+  </div>
+
+  <div class="field">
+    <%= form.label :recruitment_start_at %>
+    <%= form.datetime_local_field :recruitment_start_at, required: true%>
+  </div>
+
+  <div class="field">
+    <%= form.label :recruitment_closed_at %>
+    <%= form.datetime_local_field :recruitment_closed_at, required: true %>
+  </div>
+
+  <div class="field">
+    <%= form.label :location %>
+    <%= form.text_field :location %>
+  </div>
+
+  <div class="field">
+    <%= form.label :max_participants %>
+    <%= form.number_field :max_participants %>
+  </div>
+
+  <div class="field">
+    <%= form.label :status %>
+    <%= form.select :status, Event.statuses.keys.map { |s| [s.humanize, s] }, include_blank: true %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

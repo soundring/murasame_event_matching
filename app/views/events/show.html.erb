@@ -1,0 +1,62 @@
+<h2>イベントの詳細</h2>
+
+
+<%= link_to '一覧へ戻る', polymorphic_path([@event.eventable, :events]) %>
+<%= link_to '編集', edit_event_path(@event) %>
+<%= link_to '削除', event_path(@event), method: :delete, data: { turbo_method: :delete, turbo_confirm: '削除してよろしいですか?' } %>
+
+
+<p>
+  <strong>タイトル:</strong>
+  <%= @event.title %>
+</p>
+
+<p>
+  <strong>サブタイトル:</strong>
+  <%= @event.subtitle %>
+</p>
+
+<p>
+  <strong>説明:</strong>
+  <%= @event.description %>
+</p>
+
+<p>
+  <strong>画像URL:</strong>
+  <%= @event.image_url %>
+</p>
+
+<p>
+  <strong>イベント開始日時:</strong>
+  <%= @event.event_start_at %>
+</p>
+
+<p>
+  <strong>イベント終了日時:</strong>
+  <%= @event.event_end_at %>
+</p>
+
+<p>
+  <strong>募集開始日時:</strong>
+  <%= @event.recruitment_start_at %>
+</p>
+
+<p>
+  <strong>募集終了日時:</strong>
+  <%= @event.recruitment_closed_at %>
+</p>
+
+<p>
+  <strong>場所:</strong>
+  <%= @event.location %>
+</p>
+
+<p>
+  <strong>最大参加者数:</strong>
+  <%= @event.max_participants %>
+</p>
+
+<p>
+  <strong>ステータス:</strong>
+  <%= @event.status %>
+</p>

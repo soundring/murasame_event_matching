@@ -1,0 +1,5 @@
+<h1>イベント作成</h1>
+
+<%= render partial: 'form', locals: { eventable: @eventable, event: @event} %>
+
+<%= link_to 'キャンセル', polymorphic_path([@eventable, :events]) %>
