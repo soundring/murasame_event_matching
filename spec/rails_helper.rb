@@ -71,4 +71,12 @@ RSpec.configure do |config|
 
   config.include FactoryBot::Syntax::Methods
   config.include Devise::Test::IntegrationHelpers, type: :request
+
+  # Enable focus filtering for fit/fcontext
+  config.filter_run_when_matching :focus
+
+  # FIXME: https://alvincrespo.hashnode.dev/rails-8s-lazy-route-loading-devise
+  ActiveSupport.on_load(:action_mailer) do
+    Rails.application.reload_routes_unless_loaded
+  end
 end

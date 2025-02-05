@@ -11,6 +11,8 @@ module MurasameEventMatching
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 8.0
 
+    config.i18n.default_locale = :ja
+
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.
@@ -23,6 +25,7 @@ module MurasameEventMatching
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+    config.i18n.default_locale = :ja
 
     config.generators do |g|
       g.test_framework :rspec,
@@ -30,6 +33,7 @@ module MurasameEventMatching
         view_specs: false,
         helper_specs: false,
         routing_specs: false
+      g.helper false
     end
   end
 end

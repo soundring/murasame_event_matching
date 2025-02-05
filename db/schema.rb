@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_27_064055) do
+ActiveRecord::Schema[8.0].define(version: 2025_01_04_014746) do
   create_table "event_group_admins", force: :cascade do |t|
     t.integer "event_group_id", null: false
     t.integer "user_id", null: false
@@ -30,6 +30,31 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_27_064055) do
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_event_groups_on_name"
     t.index ["user_id"], name: "index_event_groups_on_user_id"
+  end
+
+  create_table "events", force: :cascade do |t|
+    t.string "title", null: false
+    t.string "subtitle"
+    t.text "description"
+    t.string "image_url"
+    t.datetime "event_start_at"
+    t.datetime "event_end_at"
+    t.datetime "recruitment_start_at"
+    t.datetime "recruitment_closed_at"
+    t.string "location"
+    t.integer "max_participants"
+    t.integer "status", default: 0, null: false
+    t.string "eventable_type", null: false
+    t.integer "eventable_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_start_at"], name: "index_events_on_event_start_at"
+    t.index ["eventable_type", "eventable_id"], name: "index_events_on_eventable"
+    t.index ["eventable_type", "eventable_id"], name: "index_events_on_eventable_type_and_eventable_id"
+    t.index ["location"], name: "index_events_on_location"
+    t.index ["recruitment_start_at"], name: "index_events_on_recruitment_start_at"
+    t.index ["status"], name: "index_events_on_status"
+    t.index ["title"], name: "index_events_on_title"
   end
 
   create_table "users", force: :cascade do |t|
