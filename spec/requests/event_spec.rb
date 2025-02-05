@@ -2,9 +2,11 @@ require 'rails_helper'
 
 RSpec.describe "Events", type: :request do
   let(:user) { create(:user) }
-  let(:event_group) { create(:event_group) }
+  let(:event_group) { create(:event_group, user: user) }
 
   before { sign_in user }
+
+  # TODO: 個人イベントの場合のテストを追加する
 
   describe "GET /index" do
     context 'サインインしてない場合' do
@@ -17,23 +19,21 @@ RSpec.describe "Events", type: :request do
     end
 
     context 'サインインしている場合' do
-      context 'EventGroupに紐付いている場合' do
-        let!(:event) { create(:event, eventable: event_group) }
-
-        it '200 OKが返されること' do
-          get event_group_events_path(event_group)
-          expect(response).to have_http_status(200)
-        end
+      it '200 OKが返されること' do
+        get event_group_events_path(event_group)
+        expect(response).to have_http_status(200)
       end
     end
   end
 
   describe "GET /show" do
-    let!(:event) { create(:event, eventable: event_group) }
+    context '存在するイベントの場合' do
+      let!(:event) { create(:event, eventable: event_group) }
 
-    it '200 OKが返されること' do
-      get event_path(event)
-      expect(response).to have_http_status(200)
+      it '200 OKが返されること' do
+        get event_path(event)
+        expect(response).to have_http_status(200)
+      end
     end
 
     context '存在しないイベントの場合' do
@@ -64,13 +64,11 @@ RSpec.describe "Events", type: :request do
       }
     }
 
-    context 'EventGroupに紐付いている場合' do
-      it '新しいイベントを作成してリダイレクトされること' do
-        expect {
-          post event_group_events_path(event_group), params: { event: event_params }
-        }.to change(Event, :count).by(1)
-        expect(response).to redirect_to(event_group_events_path(event_group))
-      end
+    it '新しいイベントを作成してリダイレクトされること' do
+      expect {
+        post event_group_events_path(event_group), params: { event: event_params }
+      }.to change(Event, :count).by(1)
+      expect(response).to redirect_to(event_group_events_path(event_group))
     end
 
     context '無効なパラメータの場合' do
@@ -86,7 +84,7 @@ RSpec.describe "Events", type: :request do
   end
 
   describe "GET /edit" do
-    context 'EventGroupに紐付いている場合' do
+    context '存在するイベントの場合' do
       let!(:event) { create(:event, eventable: event_group) }
 
       it '200 OKが返されること' do
@@ -106,22 +104,26 @@ RSpec.describe "Events", type: :request do
   end
 
   describe "PATCH /update" do
-    let!(:event) { create(:event, eventable: event_group) }
-    let(:valid_params) { { event: { title: 'Updated Title' } } }
-    let(:invalid_params) { { event: { title: '' } } }
+    context '存在するイベントの場合' do
+      let!(:event) { create(:event, eventable: event_group) }
 
-    context '有効なパラメータの場合' do
-      it 'イベントを更新しリダイレクトする' do
-        patch event_path(event), params: valid_params
-        expect(event.reload.title).to eq('Updated Title')
-        expect(response).to redirect_to(event)
+      context '有効なパラメータの場合' do
+        let(:valid_params) { { event: { title: 'Updated Title' } } }
+
+        it 'イベントを更新しリダイレクトする' do
+          patch event_path(event), params: valid_params
+          expect(event.reload.title).to eq('Updated Title')
+          expect(response).to redirect_to(event)
+        end
       end
-    end
 
-    context '無効なパラメータの場合' do
-      it '更新に失敗し編集画面が再表示されること' do
-        patch event_path(event), params: invalid_params
-        expect(response).to have_http_status(422)
+      context '無効なパラメータの場合' do
+        let(:invalid_params) { { event: { title: '' } } }
+
+        it '更新に失敗し編集画面が再表示されること' do
+          patch event_path(event), params: invalid_params
+          expect(response).to have_http_status(422)
+        end
       end
     end
 
@@ -136,7 +138,7 @@ RSpec.describe "Events", type: :request do
   end
 
   describe "DELETE /destroy" do
-    context 'EventGroupに紐付いている場合' do
+    context '存在するイベントの場合' do
       let!(:event) { create(:event, eventable: event_group) }
 
       it 'イベントを削除しイベント一覧にリダイレクトされること' do

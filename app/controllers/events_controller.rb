@@ -2,19 +2,22 @@ class EventsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @events = eventable.events
+    authorize Event
+    @events = fetch_events
   end
 
   def show
-    event
+    authorize event
   end
 
   def new
     @event = eventable.events.new
+    authorize @event
   end
 
   def create
     @event = eventable.events.new(event_params)
+    authorize @event
 
     if @event.save
       redirect_to polymorphic_path([@event.eventable, :events])
@@ -24,7 +27,7 @@ class EventsController < ApplicationController
   end
 
   def edit
-    event
+    authorize event
   end
 
   def update
@@ -44,6 +47,23 @@ class EventsController < ApplicationController
   end
 
   private
+
+  def fetch_events
+    if eventable.is_a?(EventGroup)
+      fetch_group_events
+    else
+      # TODO: 個人イベントの場合の処理を追加する
+      # コントローラー分けてもいいのかもしれない
+    end
+  end
+
+  def fetch_group_events
+    if current_user.administered_groups.exists?(eventable.id)
+      eventable.events
+    else
+      eventable.events.published
+    end
+  end
 
   def eventable
     # TODO: request.path_parameters から eventable を判定する(見辛いからスキップした)
