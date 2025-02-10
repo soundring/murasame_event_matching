@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_04_014746) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_10_022711) do
   create_table "event_group_admins", force: :cascade do |t|
     t.integer "event_group_id", null: false
     t.integer "user_id", null: false
@@ -30,6 +30,27 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_04_014746) do
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_event_groups_on_name"
     t.index ["user_id"], name: "index_event_groups_on_user_id"
+  end
+
+  create_table "event_participants", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "event_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_id", "user_id"], name: "index_event_participants_on_event_id_and_user_id", unique: true
+    t.index ["event_id"], name: "index_event_participants_on_event_id"
+    t.index ["user_id"], name: "index_event_participants_on_user_id"
+  end
+
+  create_table "event_waitlists", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "event_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_id", "created_at"], name: "index_event_waitlists_on_event_id_and_created_at"
+    t.index ["event_id", "user_id"], name: "index_event_waitlists_on_event_id_and_user_id", unique: true
+    t.index ["event_id"], name: "index_event_waitlists_on_event_id"
+    t.index ["user_id"], name: "index_event_waitlists_on_user_id"
   end
 
   create_table "events", force: :cascade do |t|
@@ -73,4 +94,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_04_014746) do
   add_foreign_key "event_group_admins", "event_groups"
   add_foreign_key "event_group_admins", "users"
   add_foreign_key "event_groups", "users"
+  add_foreign_key "event_participants", "events"
+  add_foreign_key "event_participants", "users"
+  add_foreign_key "event_waitlists", "events"
+  add_foreign_key "event_waitlists", "users"
 end
