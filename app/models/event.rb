@@ -1,6 +1,12 @@
 class Event < ApplicationRecord
   belongs_to :eventable, polymorphic: true
 
+  has_many :event_participants, dependent: :destroy
+  has_many :participants, through: :event_participants, source: :user
+
+  has_many :event_waitlists, dependent: :destroy
+  has_many :waitlisted_users, through: :event_waitlists, source: :user
+
   validates :title, presence: true
   validates :event_start_at, presence: true
   validates :event_end_at, presence: true, comparison: { greater_than: :event_start_at }
