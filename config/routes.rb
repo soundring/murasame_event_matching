@@ -16,7 +16,10 @@ Rails.application.routes.draw do
   resource :dashboard, only: %i[show]
   resources :event_groups do
     resources :event_group_admins, only: %i[index new create destroy]
-    resources :events, shallow: true
+    resources :events, shallow: true do
+      resources :participants, only: [:new, :create, :destroy], controller: 'event_participants'
+      resources :waitlists, only: [:destroy], controller: 'event_waitlists'
+    end
   end
   # TODO: 個人イベントのルーティング
 end
