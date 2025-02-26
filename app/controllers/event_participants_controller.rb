@@ -7,6 +7,9 @@ class EventParticipantsController < ApplicationController
 
   # 参加登録は current_user 前提（他人の登録はさせない）
   def create
+    new_participant = EventParticipant.new(user: current_user, event: event)
+    authorize new_participant
+
     service = EventRegistrationService.new(current_user, event)
     begin
       service.create_registration!
@@ -19,6 +22,7 @@ class EventParticipantsController < ApplicationController
 
   def destroy
     participant = EventParticipant.find(params[:id])
+    authorize participant
 
     # TODO: 削除時にcurrent_userを渡す必要ないのでクラスを分けるなりする
     service = EventRegistrationService.new(current_user, event)
