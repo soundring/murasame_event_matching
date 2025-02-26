@@ -2,22 +2,24 @@ class EventParticipantsController < ApplicationController
   before_action :authenticate_user!
 
   def new
+    @event = Event.find(params[:event_id])
     @event_participant = EventParticipant.new
   end
 
   # 参加登録は current_user 前提（他人の登録はさせない）
   def create
-    new_participant = EventParticipant.new(user: current_user, event: event)
-    authorize new_participant
+    event
+    @event_participant = EventParticipant.new(user: current_user, event: event)
+    authorize @event_participant
 
     service = EventRegistrationService.new(current_user, event)
     begin
       service.create_registration!
-      flash[:notice] = "参加登録が完了しました。"
+      redirect_to event_path(event)
     rescue ActiveRecord::RecordInvalid => e
-      flash[:alert] = e.record.errors.full_messages.join(", ")
+      @event_participant = e.record
+      render :new, status: :unprocessable_entity
     end
-    redirect_to event_path(event)
   end
 
   def destroy
@@ -28,9 +30,7 @@ class EventParticipantsController < ApplicationController
     service = EventRegistrationService.new(current_user, event)
     begin
       service.destroy_participant!(participant)
-      flash[:notice] = "参加登録を削除しました。"
     rescue ActiveRecord::RecordInvalid => e
-      flash[:alert] = e.record.errors.full_messages.join(", ")
     end
     redirect_to event_path(event)
   end

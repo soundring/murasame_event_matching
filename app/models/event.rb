@@ -25,6 +25,14 @@ class Event < ApplicationRecord
     participants.count >= max_participants
   end
 
+  def registered?(user)
+    participants.include?(user) || waitlisted_users.include?(user)
+  end
+
+  def registration_for(user)
+    event_participants.find_by(user: user) || event_waitlists.find_by(user: user)
+  end
+
   private
 
   def event_start_after_recruitment_start

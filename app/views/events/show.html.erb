@@ -5,7 +5,27 @@
 <%= link_to '編集', edit_event_path(@event) %>
 <%= link_to '削除', event_path(@event), method: :delete, data: { turbo_method: :delete, turbo_confirm: '削除してよろしいですか?' } %>
 
+<% if @event.registered?(current_user) %>
+  <% registration = @event.registration_for(current_user) %>
+  <% if registration.is_a?(EventParticipant) %>
+    <%= link_to '参加登録キャンセル', participant_path(registration, event_id: @event.id),
+        method: :delete,
+        data: { turbo_method: :delete, turbo_confirm: '本当にキャンセルしてよろしいですか?' },
+        class: 'btn btn-warning' %>
+  <% elsif registration.is_a?(EventWaitlist) %>
+    <%= link_to '補欠登録キャンセル', waitlist_path(registration, event_id: @event.id),
+        method: :delete,
+        data: { turbo_method: :delete, turbo_confirm: '本当にキャンセルしてよろしいですか?' },
+        class: 'btn btn-warning' %>
+  <% end %>
+<% else %>
+  <%= link_to '参加登録', new_event_participant_path(event_id: @event.id),
+      data: { turbo: true },
+      class: 'btn btn-primary' %>
+<% end %>
 
+
+<h3>イベント情報</h3>
 <p>
   <strong>タイトル:</strong>
   <%= @event.title %>
@@ -60,3 +80,17 @@
   <strong>ステータス:</strong>
   <%= @event.status %>
 </p>
+
+<h3>参加者一覧</h3>
+<ul>
+  <% @event.event_participants.each do |participant| %>
+    <li><%= participant.user.email %></li>
+  <% end %>
+</ul>
+
+<h3>補欠者一覧</h3>
+<ul>
+  <% @event.event_waitlists.each do |waitlist| %>
+    <li><%= waitlist.user.email %></li>
+  <% end %>
+</ul>
