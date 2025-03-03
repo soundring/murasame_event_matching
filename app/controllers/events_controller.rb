@@ -7,7 +7,8 @@ class EventsController < ApplicationController
   end
 
   def show
-    authorize event
+    @event = Event.includes(event_participants: :user, event_waitlists: :user).find(params[:id])
+    authorize @event
   end
 
   def new

@@ -1,5 +1,28 @@
 ja:
   activerecord:
+    models:
+      user: "ユーザー"
+      event_group: "イベントグループ"
+      event: "イベント"
+      event_group_admin: "イベントグループ管理者"
+      event_participant: "イベント参加者"
+      event_waitlist: "イベント補欠"
+    attributes:
+      event_group:
+        name: イベントグループ名
+        description: イベントグループ説明
+      event:
+        name: イベント名
+        description: イベント説明
+        event_start_at: イベント開始日時
+        event_end_at: イベント終了日時
+        recruitment_start_at: 募集開始日時
+        recruitment_closed_at: 募集締切日時
+        max_participants: 最大参加者数
+      event_participant:
+        user: "ユーザー"
+      event_waitlist:
+        user: "ユーザー"
     errors:
       messages:
         required: "を入力してください。"
@@ -18,3 +41,15 @@ ja:
             max_participants:
               not_a_number: "は数値でなければなりません。"
               greater_than: "は0より大きい値にしてください。"
+        event_participant:
+          attributes:
+            user_id:
+              already_participant: "は既に参加者として登録されています。"
+              already_on_waitlist: "は既に補欠リストに存在します。"
+        event_waitlist:
+          attributes:
+            user_id:
+              already_participant: "は既に参加者として登録されています。"
+              already_on_waitlist: "は既に補欠リストに存在します。"
+              
+          

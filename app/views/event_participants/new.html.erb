@@ -1,0 +1,26 @@
+<h1>参加登録</h1>
+
+<p>以下のイベントに参加登録します。</p>
+<p>
+  <strong>イベントタイトル:</strong>
+  <%= @event.title %>
+</p>
+
+<%= form_with model: @event_participant, url: event_participants_path(@event), data: { turbo: true } do |form| %>
+  <% if @event_participant.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@event_participant.errors.count, "error") %> 参加登録に失敗しました:</h2>
+      <ul>
+        <% @event_participant.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= form.submit "参加登録する" %>
+  </div>
+<% end %>
+
+<%= link_to 'キャンセル', event_path(@event) %>
