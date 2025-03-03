@@ -47,9 +47,7 @@ class EventRegistrationService
     next_waitlist_user = EventWaitlist.where(event: event).order(:created_at).first
     return unless next_waitlist_user
 
-    ActiveRecord::Base.transaction do
-      next_waitlist_user.destroy!
-      EventParticipant.create!(user: next_waitlist_user.user, event: event)
-    end
+    next_waitlist_user.destroy!
+    EventParticipant.create!(user: next_waitlist_user.user, event: event)
   end
 end
