@@ -83,6 +83,8 @@
 
 <h3>参加者一覧</h3>
 <ul>
+  <%# NOTE: この処理は大量のレコードがある場合にパフォーマンス問題を引き起こす可能性がある %>
+  <%# 将来的にはバッチ処理やページネーションの導入を検討する %>
   <% @event.event_participants.each do |participant| %>
     <li><%= participant.user.email %></li>
   <% end %>

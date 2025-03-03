@@ -6,18 +6,14 @@ class EventRegistrationService
     @event = event
   end
 
-  # 参加 or 補欠登録
+  # 定員に空きがある場合は参加登録し、満員の場合は補欠リストに追加する
   def create_registration!
     ActiveRecord::Base.transaction do
-      if event.full?
-        create_waitlist!
-      else
-        create_participant!
-      end
+      event.full? ? create_waitlist! : create_participant!
     end
   end
 
-  # 参加を削除して補欠繰り上げ
+  # 参加者を削除し、補欠者を繰り上げる
   def destroy_participant!(participant)
     ActiveRecord::Base.transaction do
       participant.destroy!
@@ -25,7 +21,7 @@ class EventRegistrationService
     end
   end
 
-  # 補欠を削除
+  # 補欠登録を削除する
   def destroy_waitlist!(waitlist)
     waitlist.destroy!
   end
@@ -44,10 +40,15 @@ class EventRegistrationService
   def promote_waitlist_user!
     return if event.full?
 
-    next_waitlist_user = EventWaitlist.where(event: event).order(:created_at).first
-    return unless next_waitlist_user
+    promote_target = next_waitlist
 
-    next_waitlist_user.destroy!
-    EventParticipant.create!(user: next_waitlist_user.user, event: event)
+    return unless promote_target
+
+    promote_target.destroy!
+    EventParticipant.create!(user: promote_target.user, event: event)
+  end
+
+  def next_waitlist
+    EventWaitlist.where(event: event).order(:created_at).first
   end
 end
