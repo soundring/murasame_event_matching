@@ -144,6 +144,9 @@ scope :active, -> { where(active: true) }
 ✅ **Strong Parametersの適切な使用**
 - `params.require(:user).permit(:name, :email, :password)`
 
+✅ **update/destroyアクションのredirect_toにはstatus: :see_otherをつける**
+- `redirect_to @project, status: :see_other`
+
 ---
 
 ## **3. Rails特化レビューコメントの書き方**
