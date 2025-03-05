@@ -9,6 +9,10 @@ class EventGroup < ApplicationRecord
 
   validates :name, presence: true
 
+  def owner?(user)
+    self.user == user
+  end
+
   def admin?(user)
     return false unless user
     admin_users.include?(user)

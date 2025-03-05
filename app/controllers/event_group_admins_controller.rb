@@ -2,13 +2,12 @@ class EventGroupAdminsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @event_group = EventGroup.find(params[:event_group_id])
-    @event_group_admins = @event_group.event_group_admins
+    @event_group_admins = event_group.event_group_admins
     authorize @event_group_admins
   end
 
   def new
-    @event_group = EventGroup.find(params[:event_group_id])
+    @event_group = event_group
     @event_group_admin = EventGroupAdmin.new
     authorize @event_group_admin
   end
@@ -25,23 +24,19 @@ class EventGroupAdminsController < ApplicationController
   end
 
   def destroy
-    @event_group_admin = EventGroupAdmin.find(params[:id])
-    authorize @event_group_admin
+    authorize event_group_admin
 
-    event_group = @event_group_admin.event_group
+    event_group = event_group_admin.event_group
+    target_user = event_group_admin.user
 
-    # オーナー確認メソッドを求む
-    owner = event_group.user
-    event_group_owner = @event_group_admin.event_group.user
-
-    if event_group_owner == @event_group_admin.user
+    if event_group.owner?(target_user)
       flash[:alert] = 'オーナーは削除できません。'
-      redirect_to event_group_event_group_admins_path(event_group)
+      redirect_to event_group_event_group_admins_path(event_group), status: :see_other
     else
-      if @event_group_admin.destroy
+      if event_group_admin.destroy
       else
         flash[:alert] = '削除に失敗しました。'
-        redirect_to event_group_event_group_admins_path(event_group)
+        redirect_to event_group_event_group_admins_path(event_group), status: :see_other
       end
     end
   end
@@ -51,5 +46,13 @@ class EventGroupAdminsController < ApplicationController
   def event_group_admin_params
     params.require(:event_group_admin)
           .permit(:user_id, :event_group_id)
+  end
+
+  def event_group
+    @event_group ||= EventGroup.find(params[:event_group_id])
+  end
+
+  def event_group_admin
+    @event_group_admin ||= EventGroupAdmin.find(params[:id])
   end
 end

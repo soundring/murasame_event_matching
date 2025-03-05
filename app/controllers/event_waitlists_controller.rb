@@ -9,7 +9,7 @@ class EventWaitlistsController < ApplicationController
     service = EventRegistrationService.new(current_user, event)
     service.destroy_waitlist!(waitlist)
     flash[:notice] = "補欠登録を削除しました。"
-    redirect_to event_path(event)
+    redirect_to event_path(event), status: :see_other
   end
 
   private
