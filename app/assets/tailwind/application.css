@@ -1,1 +1,15 @@
 @import "tailwindcss";
+
+@theme {
+  --color-pastel-pink:   #E87CA1; 
+  --color-pastel-blue:   #8AB8E6; 
+  --color-pastel-green:  #8FD7B4; 
+  --color-pastel-purple: #B291E0; 
+  --color-pastel-yellow: #F7E07A;
+  --color-pastel-red:    #FF6B6B;
+  --color-pastel-orange:   #FFB347;
+}
+
+@plugin "@tailwindcss/typography";
+@plugin "@tailwindcss/forms";
+@plugin "@tailwindcss/aspect-ratio";
