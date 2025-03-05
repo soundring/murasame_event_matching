@@ -6,15 +6,8 @@ class EventGroupsController < ApplicationController
   end
 
   def show
-    @event_group = EventGroup.find(params[:id])
+    @event_group = event_group
     authorize @event_group
-
-    @owner = @event_group.user
-    @admins = @event_group.event_group_admins
-
-    @available_users = User.all.reject do |user|
-      @admins.pluck(:user_id).include?(user.id) || user.id == @owner.id
-    end
   end
 
   def new
@@ -34,12 +27,12 @@ class EventGroupsController < ApplicationController
   end
 
   def edit
-    @event_group = EventGroup.find(params[:id])
+    @event_group = event_group
     authorize @event_group
   end
 
   def update
-    @event_group = EventGroup.find(params[:id])
+    @event_group = event_group
     authorize @event_group
 
     if @event_group.update(event_group_params)
@@ -50,10 +43,9 @@ class EventGroupsController < ApplicationController
   end
 
   def destroy
-    @event_group = EventGroup.find(params[:id])
-    authorize @event_group
+    authorize event_group
 
-    @event_group.destroy
+    event_group.destroy
     redirect_to event_groups_path
   end
 
@@ -63,5 +55,9 @@ class EventGroupsController < ApplicationController
     params.require(:event_group)
           .permit(:name, :description, :image_url)
           .merge(user_id: current_user.id)
+  end
+
+  def event_group
+    @event_group ||= EventGroup.find(params[:id])
   end
 end
