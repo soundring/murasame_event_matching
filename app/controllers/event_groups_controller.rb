@@ -36,7 +36,7 @@ class EventGroupsController < ApplicationController
     authorize @event_group
 
     if @event_group.update(event_group_params)
-      redirect_to event_group_path(@event_group)
+      redirect_to event_group_path(@event_group), status: :see_other
     else
       render :edit, status: :unprocessable_entity
     end
@@ -46,7 +46,7 @@ class EventGroupsController < ApplicationController
     authorize event_group
 
     event_group.destroy
-    redirect_to event_groups_path
+    redirect_to event_groups_path, status: :see_other
   end
 
   private

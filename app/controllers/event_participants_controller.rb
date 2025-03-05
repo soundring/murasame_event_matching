@@ -32,7 +32,7 @@ class EventParticipantsController < ApplicationController
       service.destroy_participant!(participant)
     rescue ActiveRecord::RecordInvalid => e
     end
-    redirect_to event_path(event)
+    redirect_to event_path(event), status: :see_other
   end
 
   private

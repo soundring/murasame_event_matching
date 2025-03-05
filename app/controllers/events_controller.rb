@@ -33,7 +33,7 @@ class EventsController < ApplicationController
 
   def update
     if event.update(event_params)
-      redirect_to event
+      redirect_to event, status: :see_other
     else
       render :edit, status: :unprocessable_entity
     end
@@ -41,9 +41,9 @@ class EventsController < ApplicationController
 
   def destroy
     if event.destroy
-      redirect_to polymorphic_path([event.eventable, :events])
+      redirect_to polymorphic_path([event.eventable, :events]), status: :see_other
     else
-      redirect_to event
+      redirect_to event, status: :see_other
     end
   end
 

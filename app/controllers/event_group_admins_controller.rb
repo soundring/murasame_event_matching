@@ -31,12 +31,12 @@ class EventGroupAdminsController < ApplicationController
 
     if event_group.owner?(target_user)
       flash[:alert] = 'オーナーは削除できません。'
-      redirect_to event_group_event_group_admins_path(event_group)
+      redirect_to event_group_event_group_admins_path(event_group), status: :see_other
     else
       if event_group_admin.destroy
       else
         flash[:alert] = '削除に失敗しました。'
-        redirect_to event_group_event_group_admins_path(event_group)
+        redirect_to event_group_event_group_admins_path(event_group), status: :see_other
       end
     end
   end
