@@ -1,16 +1,31 @@
-<h2>イベントグループの詳細</h2>
+<div class="container mx-auto max-w-4xl p-6">
+  <div class="flex items-center justify-between mb-6">
+    <h2 class="text-2xl font-bold text-[var(--color-pastel-purple)]">
+      <%= @event_group.name %>
+    </h2>
 
-<%= link_to '一覧へ戻る', event_groups_path %>
+    <div class="flex space-x-4">
+      <%= link_to 'イベント一覧', polymorphic_path([@event_group, :events]), class: "bg-[var(--color-pastel-purple)] filter hover:brightness-90 text-white font-bold py-2 px-4 rounded" %>
+      <% if @event_group.admin?(current_user)  %>
+        <%= link_to '管理者管理', event_group_event_group_admins_path(@event_group), class: "bg-[var(--color-pastel-pink)] filter hover:brightness-90 text-white font-bold py-2 px-4 rounded" %>
+      <% end %>  
+    </div>
+  </div>
 
-<%= link_to 'イベント一覧', polymorphic_path([@event_group, :events]) %>
+  <% if @event_group.image_url.present? %>
+    <div class="w-full max-h-64 aspect-[16/9] rounded-md overflow-hidden">
+      <%= image_tag @event_group.image_url, class: "w-full h-full object-cover", alt: @event_group.name %>
+    </div>
+  <% else %>
+    <div class="w-full max-h-64 aspect-[16/9] bg-gray-50 flex items-center justify-center rounded-md">
+      <span class="text-gray-500">画像はありません</span>
+    </div>
+  <% end %>
 
-<div>
-  <h3><%= @event_group.name %></h3>
-  <h4>説明<p><%= @event_group.description %></p></h4>
-  <h4>グループ画像</h4>
-  <%= image_tag @event_group.image_url, size: "400x200" %>
-
-  <div>
-  <%= link_to '管理者管理', event_group_event_group_admins_path(@event_group) %>
+  <div class="py-4">
+    <h3 class="text-[var(--color-pastel-brown)] text-xl font-bold">グループ説明</h3>
+    <p class="prose max-w-none">
+      <%= @event_group.description %>
+    </p>
   </div>
 </div>

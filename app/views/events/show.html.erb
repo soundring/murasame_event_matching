@@ -1,13 +1,8 @@
-<h2>イベントの詳細</h2>
-
-  <div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
+<div class="container mx-auto max-w-4xl p-6 space-y-8">
+  <div class="flex items-center justify-between">
+    <h2 class="text-3xl font-bold text-[var(--color-pastel-purple)]">イベント情報</h2>
     <div class="flex items-center space-x-4">
-      <%= link_to '一覧へ戻る', polymorphic_path([@event.eventable, :events]), class: "text-[var(--color-pastel-purple)] hover:underline" %>
       <%= link_to '編集', edit_event_path(@event), class: "bg-[var(--color-pastel-orange)] filter hover:brightness-90 text-white font-bold py-2 px-4 rounded" %>
-      <%= link_to '削除', event_path(@event), method: :delete, data: { turbo_confirm: '削除してよろしいですか？' }, class: "bg-[var(--color-pastel-red)] filter hover:brightness-90 text-white font-bold py-2 px-4 rounded" %>
-    </div>
-    
-    <div>
       <% if @event.registered?(current_user) %>
         <% registration = @event.registration_for(current_user) %>
         <% if registration.is_a?(EventParticipant) %>
@@ -28,116 +23,76 @@
       <% end %>
     </div>
   </div>
-  
+
   <div class="bg-white p-6 rounded-lg shadow-md border-2 border-[var(--color-pastel-pink)] space-y-6">
-    <p><strong>タイトル:</strong> <%= @event.title %></p>
-    <p><strong>サブタイトル:</strong> <%= @event.subtitle %></p>
-    <p><strong>説明:</strong></p>
-    <div class="prose max-w-none">
-      <%= @event.description %>
+    <div>
+      <h3 class="text-[var(--color-pastel-brown)] text-lg font-bold">タイトル:</h3>
+      <p><%= @event.title %></p>
     </div>
-    <p><strong>画像URL:</strong> <%= @event.image_url %></p>
-    <p><strong>イベント開始日時:</strong> <%= @event.event_start_at %></p>
-    <p><strong>イベント終了日時:</strong> <%= @event.event_end_at %></p>
-    <p><strong>募集開始日時:</strong> <%= @event.recruitment_start_at %></p>
-    <p><strong>募集終了日時:</strong> <%= @event.recruitment_closed_at %></p>
-    <p><strong>場所:</strong> <%= @event.location %></p>
-    <p><strong>最大参加者数:</strong> <%= @event.max_participants %></p>
-    <p><strong>ステータス:</strong> <%= @event.status %></p>
+    <div>
+      <h3 class="text-[var(--color-pastel-brown)] text-lg font-bold">サブタイトル:</h3>
+      <p><%= @event.subtitle %></p>
+    </div>
+    <div>
+      <h3 class="text-[var(--color-pastel-brown)] text-lg font-bold">説明:</h3>
+      <div class="prose max-w-none">
+        <%= @event.description %>
+      </div>
+    </div>
+    <div>
+      <h3 class="text-[var(--color-pastel-brown)] text-lg font-bold">画像URL:</h3>
+      <p><%= @event.image_url %></p>
+    </div>
+    <div>
+      <h3 class="text-[var(--color-pastel-brown)] text-lg font-bold">イベント開始日時:</h3>
+      <p><%= @event.event_start_at %></p>
+    </div>
+    <div>
+      <h3 class="text-[var(--color-pastel-brown)] text-lg font-bold">イベント終了日時:</h3>
+      <p><%= @event.event_end_at %></p>
+    </div>
+    <div>
+      <h3 class="text-[var(--color-pastel-brown)] text-lg font-bold">募集開始日時:</h3>
+      <p><%= @event.recruitment_start_at %></p>
+    </div>
+    <div>
+      <h3 class="text-[var(--color-pastel-brown)] text-lg font-bold">募集終了日時:</h3>
+      <p><%= @event.recruitment_closed_at %></p>
+    </div>
+    <div>
+      <h3 class="text-[var(--color-pastel-brown)] text-lg font-bold">場所:</h3>
+      <p><%= @event.location %></p>
+    </div>
+    <div>
+      <h3 class="text-[var(--color-pastel-brown)] text-lg font-bold">最大参加者数:</h3>
+      <p><%= @event.max_participants %></p>
+    </div>
+    <div>
+      <h3 class="text-[var(--color-pastel-brown)] text-lg font-bold">ステータス:</h3>
+      <p><%= @event.status %></p>
+    </div>
   </div>
 
-<%= link_to '一覧へ戻る', polymorphic_path([@event.eventable, :events]) %>
-<%= link_to '編集', edit_event_path(@event) %>
-<%= link_to '削除', event_path(@event), method: :delete, data: { turbo_method: :delete, turbo_confirm: '削除してよろしいですか?' } %>
+  <div class="space-y-4">
+    <h3 class="text-2xl font-bold text-[var(--color-pastel-purple)]">参加者一覧</h3>
+    <ul class="list-disc list-inside">
+      <% @event.event_participants.each do |participant| %>
+        <li class="text-[var(--color-pastel-blue)]"><%= participant.user.email %></li>
+      <% end %>
+    </ul>
+  </div>
 
-<% if @event.registered?(current_user) %>
-  <% registration = @event.registration_for(current_user) %>
-  <% if registration.is_a?(EventParticipant) %>
-    <%= link_to '参加登録キャンセル', participant_path(registration, event_id: @event.id),
-        method: :delete,
-        data: { turbo_method: :delete, turbo_confirm: '本当にキャンセルしてよろしいですか?' },
-        class: 'btn btn-warning' %>
-  <% elsif registration.is_a?(EventWaitlist) %>
-    <%= link_to '補欠登録キャンセル', waitlist_path(registration, event_id: @event.id),
-        method: :delete,
-        data: { turbo_method: :delete, turbo_confirm: '本当にキャンセルしてよろしいですか?' },
-        class: 'btn btn-warning' %>
-  <% end %>
-<% else %>
-  <%= link_to '参加登録', new_event_participant_path(event_id: @event.id),
-      data: { turbo: true },
-      class: 'btn btn-primary' %>
-<% end %>
+  <div class="space-y-4">
+    <h3 class="text-2xl font-bold text-[var(--color-pastel-purple)]">補欠者一覧</h3>
+    <ul class="list-disc list-inside">
+      <% @event.event_waitlists.each do |waitlist| %>
+        <li class="text-[var(--color-pastel-blue)]"><%= waitlist.user.email %></li>
+      <% end %>
+    </ul>
+  </div>
 
-
-<h3>イベント情報</h3>
-<p>
-  <strong>タイトル:</strong>
-  <%= @event.title %>
-</p>
-
-<p>
-  <strong>サブタイトル:</strong>
-  <%= @event.subtitle %>
-</p>
-
-<p>
-  <strong>説明:</strong>
-  <%= @event.description %>
-</p>
-
-<p>
-  <strong>画像URL:</strong>
-  <%= @event.image_url %>
-</p>
-
-<p>
-  <strong>イベント開始日時:</strong>
-  <%= @event.event_start_at %>
-</p>
-
-<p>
-  <strong>イベント終了日時:</strong>
-  <%= @event.event_end_at %>
-</p>
-
-<p>
-  <strong>募集開始日時:</strong>
-  <%= @event.recruitment_start_at %>
-</p>
-
-<p>
-  <strong>募集終了日時:</strong>
-  <%= @event.recruitment_closed_at %>
-</p>
-
-<p>
-  <strong>場所:</strong>
-  <%= @event.location %>
-</p>
-
-<p>
-  <strong>最大参加者数:</strong>
-  <%= @event.max_participants %>
-</p>
-
-<p>
-  <strong>ステータス:</strong>
-  <%= @event.status %>
-</p>
-
-<h3>参加者一覧</h3>
-<ul>
-  <%# NOTE: この処理は大量のレコードがある場合にパフォーマンス問題を引き起こす可能性がある %>
-  <%# 将来的にはバッチ処理やページネーションの導入を検討する %>
-  <% @event.event_participants.each do |participant| %>
-    <li><%= participant.user.email %></li>
-  <% end %>
-</ul>
-
-<h3>補欠者一覧</h3>
-<ul>
-  <% @event.event_waitlists.each do |waitlist| %>
-    <li><%= waitlist.user.email %></li>
-  <% end %>
-</ul>
+  <div class="flex justify-between mt-4">
+    <%= link_to 'イベント一覧へ戻る', polymorphic_path([@event.eventable, :events]), class: "bg-[var(--color-pastel-purple)] filter hover:brightness-90 text-white font-bold py-2 px-4 rounded" %>
+    <%= link_to 'イベント削除', event_path(@event), method: :delete, data: { turbo_confirm: '削除してよろしいですか？' }, class: "bg-[var(--color-pastel-red)] filter hover:brightness-90 text-white font-bold py-2 px-4 rounded" %>
+  </div>
+</div>
