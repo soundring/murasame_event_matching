@@ -1,13 +1,20 @@
 <%= turbo_frame_tag 'form' do %>
-  <h3>ユーザー選択</h3>
-  <%= form_with model: event_group_admin, url: event_group_event_group_admins_path(event_group), local: true do |form| %>
-    <%= form.hidden_field :event_group_id, value: event_group.id %>
-    <div>
-      <%# TODO: オーナーとすでに管理者の人は除く %>
-      <%= form.collection_select :user_id, User.all, :id, :email, prompt: true %>
+  <% if flash.now[:alert] %>
+    <div class="bg-[var(--color-pastel-red)] text-white p-3 rounded-lg mb-4">
+      <%= flash.now[:alert] %>
     </div>
+  <% end %>
+
+  <%= form_with model: event_group_admin, url: event_group_event_group_admins_path(event_group), local: true, class: "space-y-4" do |form| %>
+    <%= form.hidden_field :event_group_id, value: event_group.id %>
+
     <div>
-      <%= form.submit '追加' %>
+      <label class="block text-sm font-medium text-gray-700">ユーザーを選択</label>
+      <%= form.collection_select :user_id, User.all, :id, :email, { prompt: "選択してください" }, class: "block w-full mt-1 p-2 border rounded-lg" %>
+    </div>
+
+    <div class="text-right">
+      <%= form.submit '追加', class: "px-4 py-2 bg-[var(--color-pastel-blue)] filter hover:brightness-90 text-white rounded-lg" %>
     </div>
   <% end %>
 <% end %>

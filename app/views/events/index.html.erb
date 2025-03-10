@@ -1,38 +1,35 @@
-<h1>イベント一覧</h1>
+<%# TODO:
+ここは前イベントを表示可能なので、グループイベント一覧に関してはevent_groups配下にビューを作成してそこを参照させる。
+イベントの作成ボタンもそちらに移動する
+ %>
+<div class="container mx-auto max-w-4xl p-6 space-y-6">
+  <div class="flex items-center justify-between mb-6">
+  <h2 class="text-3xl font-bold text-[var(--color-pastel-purple)]">イベント一覧</h2>
+      <% if @eventable.is_a?(EventGroup) %>
+        <% if @eventable.admin?(current_user) %>
+          <%= link_to '新規グループイベント作成', new_event_group_event_path, class: "bg-[var(--color-pastel-pink)] filter hover:brightness-90 text-white font-bold py-2 px-4 rounded" %>
+        <% end %>
+      <% else %>
+      <%# TODO: 個人イベント作成＋ダッシュボードに戻る %>
+      <% end %>
+  
+  </div>
 
-<table>
-  <thead>
-    <tr>
-      <th>タイトル</th>
-      <th>開始日時</th>
-      <th>終了日時</th>
-      <th>場所</th>
-      <th>最大参加者数</th>
-      <th>ステータス</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @events.each do |event| %>
-      <tr>
-        <td><%= event.title %></td>
-        <td><%= event.event_start_at %></td>
-        <td><%= event.event_end_at %></td>
-        <td><%= event.location %></td>
-        <td><%= event.max_participants %></td>
-        <td><%= event.status %></td>
-        <td><%= link_to '詳細', event_path(event) %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<% if @eventable.is_a?(EventGroup) %>
-  <%= link_to '新規イベント作成', new_event_group_event_path %>
-  <%= link_to 'イベントグループに戻る', event_group_path(@eventable) %>
-<% else %>
-   <%# # TODO: 個人イベント作成＋ダッシュボードに戻る %>
-<% end %>
+  <% @events.each do |event| %>
+    <div class="bg-white p-6 rounded-lg border-2 border-[var(--color-pastel-pink)] shadow-md hover:shadow-lg transition-shadow duration-200">
+      <h3 class="text-2xl font-bold text-[var(--color-pastel-purple)] mb-4"><%= event.title %></h3>
+      
+      <div class="space-y-2">
+        <p class="text-[var(--color-pastel-brown)]"><strong>開始日時:</strong> <%= event.event_start_at %></p>
+        <p class="text-[var(--color-pastel-brown)]"><strong>終了日時:</strong> <%= event.event_end_at %></p>
+        <p class="text-[var(--color-pastel-brown)]"><strong>場所:</strong> <%= event.location %></p>
+        <p class="text-[var(--color-pastel-brown)]"><strong>最大参加者数:</strong> <%= event.max_participants %></p>
+        <p class="text-[var(--color-pastel-brown)]"><strong>公開状態:</strong> <%= event.status %></p>
+      </div>
+      
+      <div class="mt-4">
+        <%= link_to '詳細', event_path(event), class: "block w-full bg-[var(--color-pastel-purple)] filter hover:brightness-90 text-white font-semibold py-2 px-4 rounded text-center" %>
+      </div>
+    </div>
+  <% end %>
+</div>

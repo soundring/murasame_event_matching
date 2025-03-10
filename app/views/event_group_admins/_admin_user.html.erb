@@ -1,17 +1,18 @@
 <%= turbo_frame_tag "admin_user_#{event_group_admin.id}" do %>
-  <div>
+  <div class="p-3 border-b">
     <% if flash.now[:alert] %>
-      <div>
+      <div class="bg-[var(--color-pastel-red)] text-white p-2 rounded-lg mb-2">
         <%= flash.now[:alert] %>
       </div>
     <% end %>
 
-    <div>
-      <%= event_group_admin.user.email %>
-      <%= button_to '削除', 
-              event_group_event_group_admin_path(event_group_admin.event_group_id, event_group_admin.id), 
-              method: :delete, 
-              data: { turbo_confirm: "本当に削除しますか？" } 
+    <div class="flex justify-between items-center">
+      <span class="text-gray-800"><%= event_group_admin.user.email %></span>
+      <%= button_to '削除',
+              event_group_event_group_admin_path(event_group_admin.event_group_id, event_group_admin.id),
+              method: :delete,
+              data: { turbo_confirm: "本当に削除しますか？" },
+              class: "px-3 py-1 bg-[var(--color-pastel-red)] filter hover:brightness-90 text-white rounded-lg"
       %>
     </div>
   </div>
