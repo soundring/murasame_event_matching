@@ -1,5 +1,50 @@
 <h2>イベントの詳細</h2>
 
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
+    <div class="flex items-center space-x-4">
+      <%= link_to '一覧へ戻る', polymorphic_path([@event.eventable, :events]), class: "text-[var(--color-pastel-purple)] hover:underline" %>
+      <%= link_to '編集', edit_event_path(@event), class: "bg-[var(--color-pastel-orange)] filter hover:brightness-90 text-white font-bold py-2 px-4 rounded" %>
+      <%= link_to '削除', event_path(@event), method: :delete, data: { turbo_confirm: '削除してよろしいですか？' }, class: "bg-[var(--color-pastel-red)] filter hover:brightness-90 text-white font-bold py-2 px-4 rounded" %>
+    </div>
+    
+    <div>
+      <% if @event.registered?(current_user) %>
+        <% registration = @event.registration_for(current_user) %>
+        <% if registration.is_a?(EventParticipant) %>
+          <%= link_to '参加登録キャンセル', participant_path(registration, event_id: @event.id),
+              method: :delete,
+              data: { turbo_method: :delete, turbo_confirm: '本当にキャンセルしてよろしいですか?' },
+              class: "bg-[var(--color-pastel-red)] filter hover:brightness-90 text-white font-bold py-2 px-4 rounded" %>
+        <% elsif registration.is_a?(EventWaitlist) %>
+          <%= link_to '補欠登録キャンセル', waitlist_path(registration, event_id: @event.id),
+              method: :delete,
+              data: { turbo_method: :delete, turbo_confirm: '本当にキャンセルしてよろしいですか?' },
+              class: "bg-[var(--color-pastel-red)] filter hover:brightness-90 text-white font-bold py-2 px-4 rounded" %>
+        <% end %>
+      <% else %>
+        <%= link_to '参加登録', new_event_participant_path(event_id: @event.id),
+            data: { turbo: true },
+            class: "bg-[var(--color-pastel-pink)] filter hover:brightness-90 text-white font-bold py-2 px-4 rounded" %>
+      <% end %>
+    </div>
+  </div>
+  
+  <div class="bg-white p-6 rounded-lg shadow-md border-2 border-[var(--color-pastel-pink)] space-y-6">
+    <p><strong>タイトル:</strong> <%= @event.title %></p>
+    <p><strong>サブタイトル:</strong> <%= @event.subtitle %></p>
+    <p><strong>説明:</strong></p>
+    <div class="prose max-w-none">
+      <%= @event.description %>
+    </div>
+    <p><strong>画像URL:</strong> <%= @event.image_url %></p>
+    <p><strong>イベント開始日時:</strong> <%= @event.event_start_at %></p>
+    <p><strong>イベント終了日時:</strong> <%= @event.event_end_at %></p>
+    <p><strong>募集開始日時:</strong> <%= @event.recruitment_start_at %></p>
+    <p><strong>募集終了日時:</strong> <%= @event.recruitment_closed_at %></p>
+    <p><strong>場所:</strong> <%= @event.location %></p>
+    <p><strong>最大参加者数:</strong> <%= @event.max_participants %></p>
+    <p><strong>ステータス:</strong> <%= @event.status %></p>
+  </div>
 
 <%= link_to '一覧へ戻る', polymorphic_path([@event.eventable, :events]) %>
 <%= link_to '編集', edit_event_path(@event) %>
