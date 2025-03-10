@@ -1,26 +1,29 @@
-<h1>参加登録</h1>
-
-<p>以下のイベントに参加登録します。</p>
-<p>
-  <strong>イベントタイトル:</strong>
-  <%= @event.title %>
-</p>
-
-<%= form_with model: @event_participant, url: event_participants_path(@event), data: { turbo: true } do |form| %>
-  <% if @event_participant.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@event_participant.errors.count, "error") %> 参加登録に失敗しました:</h2>
-      <ul>
-        <% @event_participant.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
+<div class="container mx-auto max-w-4xl p-6 space-y-8">
+  <h2 class="text-3xl font-bold text-[var(--color-pastel-purple)]">参加登録</h2>
+  
+  <p class="text-lg">以下のイベントに参加登録します。</p>
+  
+  <div>
+    <div>
+      <h3 class="text-xl font-bold"><%= @event.title %></h3>
     </div>
-  <% end %>
-
-  <div class="actions">
-    <%= form.submit "参加登録する" %>
+    
+    <%= form_with model: @event_participant, url: event_participants_path(@event), data: { turbo: true }, class: "space-y-4" do |form| %>
+      <% if @event_participant.errors.any? %>
+        <div id="error_explanation" class="bg-[var(--color-pastel-red)] text-white p-4 rounded">
+          <h2 class="font-bold"><%= pluralize(@event_participant.errors.count, "error") %> 参加登録に失敗しました:</h2>
+          <ul class="list-disc list-inside">
+            <% @event_participant.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+  
+      <div class="flex justify-end space-x-2">
+        <%= link_to 'キャンセル', event_path(@event), class: "bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2 px-4 rounded" %>
+        <%= form.submit "参加登録する", class: "bg-[var(--color-pastel-pink)] filter hover:brightness-90 text-white font-bold py-2 px-4 rounded" %>
+      </div> 
+    <% end %>
   </div>
-<% end %>
-
-<%= link_to 'キャンセル', event_path(@event) %>
+</div>
