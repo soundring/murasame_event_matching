@@ -1,0 +1,12 @@
+<header class="bg-gray-800 text-white p-4">
+  <div class="container mx-auto flex justify-between items-center">
+    <h1 class="text-xl font-semibold">Murasame イベントマッチング</h1>
+    <nav>
+      <ul class="flex space-x-4">
+        <li><%= link_to "ダッシュボード", root_path, class: "hover:text-gray-300" %></li>
+        <li><%= link_to "イベントグループ管理", event_groups_path, class: "hover:text-gray-300" %></li>
+        <%= link_to 'ログアウト', destroy_user_session_path, method: :delete, data: { turbo_method: :delete }, class: "hover:text-gray-300" %>
+      </ul>
+    </nav>
+  </div>
+</header>
