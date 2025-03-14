@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_03_062604) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_14_080857) do
   create_table "event_group_admins", force: :cascade do |t|
     t.integer "event_group_id", null: false
     t.integer "user_id", null: false
@@ -24,7 +24,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_03_062604) do
   create_table "event_groups", force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
-    t.text "image_url", null: false
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -57,7 +56,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_03_062604) do
     t.string "title", null: false
     t.string "subtitle"
     t.text "description"
-    t.string "image_url"
     t.datetime "event_start_at"
     t.datetime "event_end_at"
     t.datetime "recruitment_start_at"
@@ -80,7 +78,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_03_062604) do
 
   create_table "users", force: :cascade do |t|
     t.string "display_name"
-    t.text "avatar_url"
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
