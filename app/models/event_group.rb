@@ -4,6 +4,8 @@ class EventGroup < ApplicationRecord
   has_many :admin_users, through: :event_group_admins, source: :user # 管理者
   has_many :events, as: :eventable
 
+  has_one_attached :image
+
   after_create :add_creator_as_admin
 
   validates :name, presence: true

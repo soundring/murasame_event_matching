@@ -4,32 +4,37 @@
  %>
 <div class="container mx-auto max-w-4xl p-6 space-y-6">
   <div class="flex items-center justify-between mb-6">
-  <h2 class="text-3xl font-bold text-[var(--color-pastel-purple)]">イベント一覧</h2>
-      <% if @eventable.is_a?(EventGroup) %>
-        <% if @eventable.admin?(current_user) %>
-          <%= link_to '新規グループイベント作成', new_event_group_event_path, class: "bg-[var(--color-pastel-pink)] filter hover:brightness-90 text-white font-bold py-2 px-4 rounded" %>
-        <% end %>
-      <% else %>
-      <%# TODO: 個人イベント作成＋ダッシュボードに戻る %>
-      <% end %>
-  
+    <h2 class="text-3xl font-bold text-[var(--color-pastel-purple)]">イベント一覧</h2>
+    <% if @eventable.is_a?(EventGroup) && @eventable.admin?(current_user) %>
+      <%= link_to '新規グループイベント作成', new_event_group_event_path, class: "bg-[var(--color-pastel-pink)] filter hover:brightness-90 text-white font-bold py-2 px-4 rounded" %>
+    <% end %>
   </div>
 
   <% @events.each do |event| %>
-    <div class="bg-white p-6 rounded-lg border-2 border-[var(--color-pastel-pink)] shadow-md hover:shadow-lg transition-shadow duration-200">
-      <h3 class="text-2xl font-bold text-[var(--color-pastel-purple)] mb-4"><%= event.title %></h3>
-      
-      <div class="space-y-2">
-        <p class="text-[var(--color-pastel-brown)]"><strong>開始日時:</strong> <%= event.event_start_at %></p>
-        <p class="text-[var(--color-pastel-brown)]"><strong>終了日時:</strong> <%= event.event_end_at %></p>
-        <p class="text-[var(--color-pastel-brown)]"><strong>場所:</strong> <%= event.location %></p>
-        <p class="text-[var(--color-pastel-brown)]"><strong>最大参加者数:</strong> <%= event.max_participants %></p>
-        <p class="text-[var(--color-pastel-brown)]"><strong>公開状態:</strong> <%= event.status %></p>
+    <div class="bg-white p-6 rounded-lg border-2 border-[var(--color-pastel-pink)] shadow-md hover:shadow-lg transition-shadow duration-200 flex gap-6">
+      <div class="w-1/3 max-h-52 aspect-[16/9] rounded-md overflow-hidden bg-gray-200 flex items-center justify-center">
+        <% if event.image.attached? %>
+          <%= image_tag event.image, class: "w-full h-full object-cover", alt: event.title %>
+        <% else %>
+          <span class="text-gray-500">画像がありません</span>
+        <% end %>
       </div>
-      
-      <div class="mt-4">
-        <%= link_to '詳細', event_path(event), class: "block w-full bg-[var(--color-pastel-purple)] filter hover:brightness-90 text-white font-semibold py-2 px-4 rounded text-center" %>
+
+      <div class="w-2/3 flex flex-col justify-between">
+        <h3 class="text-2xl font-bold text-[var(--color-pastel-purple)] mb-4"><%= event.title %></h3>
+        <div class="space-y-2">
+          <p class="text-[var(--color-pastel-brown)]"><strong>開始日時:</strong> <%= event.event_start_at %></p>
+          <p class="text-[var(--color-pastel-brown)]"><strong>終了日時:</strong> <%= event.event_end_at %></p>
+          <p class="text-[var(--color-pastel-brown)]"><strong>場所:</strong> <%= event.location %></p>
+          <p class="text-[var(--color-pastel-brown)]"><strong>最大参加者数:</strong> <%= event.max_participants %></p>
+          <p class="text-[var(--color-pastel-brown)]"><strong>公開状態:</strong> <%= event.status %></p>
+        </div>
+
+        <div class="mt-4">
+          <%= link_to '詳細', event_path(event), class: "block w-full bg-[var(--color-pastel-purple)] filter hover:brightness-90 text-white font-semibold py-2 px-4 rounded text-center" %>
+        </div>
       </div>
     </div>
   <% end %>
 </div>
+

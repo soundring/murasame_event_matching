@@ -24,7 +24,17 @@
       <%= form.text_area :description, rows: 4, class: "mt-1 block w-full p-2 border-2 border-[var(--color-pastel-blue)] rounded-md shadow-sm" %>
     </div>
 
-    <%# TODO: 画像アップロードの実装 %>
+    <div>
+      <%= form.label :description, 'グループ画像', class: "block text-sm font-medium text-[var(--color-pastel-purple)]" %>
+      <div class="mt-1">
+        <label class="cursor-pointer inline-block bg-[var(--color-pastel-pink)] hover:brightness-90 text-white font-bold py-2 px-4 rounded">
+          ファイルを選択
+          <%= form.file_field :image, class: "hidden", onchange: "document.getElementById('file-name').innerText = this.files[0]?.name || ''" %>
+        </label>
+        <span id="file-name" class="ml-2"></span>
+      </div>
+    </div>
+
 
     <div class="flex justify-end space-x-2">
       <%= link_to 'キャンセル', event_groups_path, class: "bg-gray-100 filter hover:brightness-90 text-gray font-bold py-2 px-4 rounded" %>

@@ -7,6 +7,8 @@ class Event < ApplicationRecord
   has_many :event_waitlists, dependent: :destroy
   has_many :waitlisted_users, through: :event_waitlists, source: :user
 
+  has_one_attached :image
+
   validates :title, presence: true
   validates :event_start_at, presence: true
   validates :event_end_at, presence: true, comparison: { greater_than: :event_start_at }

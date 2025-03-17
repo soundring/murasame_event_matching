@@ -12,9 +12,9 @@
     </div>
   </div>
 
-  <% if @event_group.image_url.present? %>
+  <% if @event_group.image.attached? %>
     <div class="w-full max-h-64 aspect-[16/9] rounded-md overflow-hidden">
-      <%= image_tag @event_group.image_url, class: "w-full h-full object-cover", alt: @event_group.name %>
+      <%= image_tag @event_group.image, class: "w-full h-full object-cover", alt: @event_group.name %>
     </div>
   <% else %>
     <div class="w-full max-h-64 aspect-[16/9] bg-gray-50 flex items-center justify-center rounded-md">
