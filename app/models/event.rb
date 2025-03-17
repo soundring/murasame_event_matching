@@ -1,4 +1,6 @@
 class Event < ApplicationRecord
+  include ImageValidatable
+
   belongs_to :eventable, polymorphic: true
 
   has_many :event_participants, dependent: :destroy

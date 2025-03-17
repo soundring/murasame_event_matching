@@ -11,7 +11,7 @@ RSpec.describe Event, type: :model do
     expect(Event.statuses).to eq({ "draft" => 0, "published" => 1, "closed" => 2 })
   end
 
-  context "日付関連のバリデーション" do
+  describe "日付関連のバリデーション" do
     let(:yesterday) { Date.current - 1.day }
     let(:today) { Date.current }
     let(:tomorrow) { Date.current + 1.day }
@@ -64,7 +64,7 @@ RSpec.describe Event, type: :model do
     end
   end
 
-  context '定員関連のバリデーション' do
+  describe '定員関連のバリデーション' do
     it "定員の値が整数でない場合、バリデーションエラーになること" do
       event = build(:event, max_participants: "三")
       expect(event).not_to be_valid
@@ -77,7 +77,7 @@ RSpec.describe Event, type: :model do
     end
   end
 
-  context 'ポリモーフィック関連' do
+  describe 'ポリモーフィック関連' do
     let(:user) { create(:user) }
 
     it "eventable" do
@@ -89,6 +89,20 @@ RSpec.describe Event, type: :model do
     it "eventableがUserの場合でも有効であること" do
       event = build(:event, eventable: user)
       expect(event).to be_valid
+    end
+  end
+
+  describe '画像関連' do
+    it "画像を添付できること" do
+      event = create(:event)
+
+      file = fixture_file_upload(
+        Rails.root.join('spec/fixtures/test_image.jpg'),
+        'image/jpeg'
+      )
+
+      event.image.attach(file)
+      expect(event.image).to be_attached
     end
   end
 end

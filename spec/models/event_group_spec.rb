@@ -41,4 +41,16 @@ RSpec.describe EventGroup, type: :model do
       expect(event_group.admin?(nil)).to be false
     end
   end
+
+  describe '画像関連' do
+    it "画像を添付できること" do
+      file = fixture_file_upload(
+        Rails.root.join('spec/fixtures/test_image.jpg'),
+        'image/jpeg'
+      )
+
+      event_group.image.attach(file)
+      expect(event_group.image).to be_attached
+    end
+  end
 end
