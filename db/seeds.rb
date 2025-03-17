@@ -18,12 +18,10 @@ users = [
 event_groups = [
   EventGroup.find_or_create_by!(name: 'テックカンファレンス') do |group|
     group.description = 'テクノロジーに関連するイベント'
-    group.image_url = 'https://example.com/image1.jpg'
     group.user = users[0]
   end,
   EventGroup.find_or_create_by!(name: 'ミュージックフェスティバル') do |group|
     group.description = '音楽に関連するイベント'
-    group.image_url = 'https://example.com/image2.jpg'
     group.user = users[1]
   end
 ]
@@ -41,7 +39,6 @@ events = [
   Event.find_or_create_by!(title: 'RubyConf 2025') do |event|
     event.subtitle = 'Ruby on Rails カンファレンス'
     event.description = 'Ruby愛好家のためのカンファレンスです。'
-    event.image_url = 'https://example.com/event1.jpg'
     event.event_start_at = Date.current + 1.day
     event.event_end_at = Date.current + 2.days
     event.recruitment_start_at = Date.current
@@ -54,7 +51,6 @@ events = [
   Event.find_or_create_by!(title: 'サマービーツ') do |event|
     event.subtitle = '音楽フェスティバル'
     event.description = '夏の音楽フェスティバルです。'
-    event.image_url = 'https://example.com/event2.jpg'
     event.event_start_at = Date.current + 1.day
     event.event_end_at = Date.current + 2.days
     event.recruitment_start_at = Date.current

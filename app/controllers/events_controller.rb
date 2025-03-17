@@ -86,7 +86,7 @@ class EventsController < ApplicationController
       :title,
       :subtitle,
       :description,
-      :image_url,
+      :image,
       :event_start_at,
       :event_end_at,
       :recruitment_start_at,

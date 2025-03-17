@@ -53,7 +53,7 @@ class EventGroupsController < ApplicationController
 
   def event_group_params
     params.require(:event_group)
-          .permit(:name, :description, :image_url)
+          .permit(:name, :description, :image)
           .merge(user_id: current_user.id)
   end
 
