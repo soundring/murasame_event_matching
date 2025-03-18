@@ -26,17 +26,7 @@
       <%= form.text_area :description, class: "mt-1 block w-full p-2 border-2 border-[var(--color-pastel-blue)] rounded-md", rows: 4 %>
     </div>
 
-    <div class="field">
-      <%= form.label :description, 'イベント画像', class: "block text-sm font-medium text-[var(--color-pastel-purple)]" %>
-      <%# TODO: ファイル選択の部分をpartialで共通化する(グループ画像のとこでも同じ処理がある) %>
-      <div class="mt-1">
-        <label class="cursor-pointer inline-block bg-[var(--color-pastel-pink)] hover:brightness-90 text-white font-bold py-2 px-4 rounded">
-          ファイルを選択
-          <%= form.file_field :image, class: "hidden", onchange: "document.getElementById('file-name').innerText = this.files[0]?.name || ''" %>
-        </label>
-        <span id="file-name" class="ml-2"></span>
-      </div>
-    </div>
+    <%= render "shared/file_input", form: form, field: :image, label_text: 'イベント画像', dom_id: 'file-name' %>
 
     <div class="field">
       <%= form.label :event_start_at, class: "block text-sm font-medium text-[var(--color-pastel-purple)]" %>
