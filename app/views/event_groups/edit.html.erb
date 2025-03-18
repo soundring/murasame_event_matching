@@ -3,32 +3,5 @@
     イベントグループの編集
   </h2>
 
-  <%= form_with(model: @event_group, local: true, class: "bg-white p-6 rounded-lg shadow-md border-2 border-[var(--color-pastel-pink)] space-y-4") do |form| %>
-    <% if @event_group.errors.any? %>
-      <div class="p-4 bg-red-50 border-2 border-red-200 rounded">
-        <ul class="list-disc list-inside text-red-600">
-          <% @event_group.errors.full_messages.each do |message| %>
-            <li><%= message %></li>
-          <% end %>
-        </ul>
-      </div>
-    <% end %>
-
-    <div>
-      <%= form.label :name, 'グループ名', class: "block text-sm font-medium text-[var(--color-pastel-purple)]" %>
-      <%= form.text_field :name, class: "mt-1 block w-full p-2 border-2 border-[var(--color-pastel-blue)] rounded-md shadow-sm" %>
-    </div>
-
-    <div>
-      <%= form.label :description, 'グループの説明', class: "block text-sm font-medium text-[var(--color-pastel-purple)]" %>
-      <%= form.text_area :description, rows: 4, class: "mt-1 block w-full p-2 border-2 border-[var(--color-pastel-blue)] rounded-md shadow-sm" %>
-    </div>
-
-    <%# TODO: 画像アップロードの実装 %>
-
-    <div class="flex justify-end space-x-2">
-      <%= link_to 'キャンセル', event_groups_path, class: "bg-gray-100 filter hover:brightness-90 text-gray font-bold py-2 px-4 rounded" %>
-      <%= form.submit '更新', class: "bg-[var(--color-pastel-pink)] filter hover:brightness-90 text-white font-bold py-2 px-4 rounded" %>
-    </div>
-  <% end %>
+  <%= render 'form', event_group: @event_group, submit_text: '更新' %>
 </div>

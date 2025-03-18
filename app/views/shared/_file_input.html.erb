@@ -1,0 +1,10 @@
+<div class="field">
+  <%= form.label field, label_text, class: "block text-sm font-medium text-[var(--color-pastel-purple)]" %>
+  <div class="mt-1">
+    <label class="cursor-pointer inline-block bg-[var(--color-pastel-pink)] hover:brightness-90 text-white font-bold py-2 px-4 rounded">
+      ファイルを選択
+      <%= form.file_field field, class: "hidden", onchange: "document.getElementById('#{dom_id}').innerText = this.files[0]?.name || ''" %>
+    </label>
+    <span id="<%= dom_id %>" class="ml-2"></span>
+  </div>
+</div>

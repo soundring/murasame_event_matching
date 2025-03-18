@@ -7,7 +7,7 @@ class EventsController < ApplicationController
   end
 
   def show
-    @event = Event.includes(event_participants: :user, event_waitlists: :user).find(params[:id])
+    @event = event_with_participants
     authorize @event
   end
 
@@ -59,10 +59,12 @@ class EventsController < ApplicationController
   end
 
   def fetch_group_events
+    base_query = eventable.events.with_attached_image.includes(:event_participants, :event_waitlists)
+
     if current_user.administered_groups.exists?(eventable.id)
-      eventable.events
+      base_query
     else
-      eventable.events.published
+      base_query.published
     end
   end
 
@@ -78,7 +80,13 @@ class EventsController < ApplicationController
   end
 
   def event
-    @event ||= Event.find(params[:id])
+    @event ||= Event.with_attached_image.find(params[:id])
+  end
+
+  def event_with_participants
+    @event_with_participants ||= Event.includes(event_participants: :user, event_waitlists: :user)
+                                     .with_attached_image
+                                     .find(params[:id])
   end
 
   def event_params
@@ -86,7 +94,7 @@ class EventsController < ApplicationController
       :title,
       :subtitle,
       :description,
-      :image_url,
+      :image,
       :event_start_at,
       :event_end_at,
       :recruitment_start_at,

@@ -26,10 +26,7 @@
       <%= form.text_area :description, class: "mt-1 block w-full p-2 border-2 border-[var(--color-pastel-blue)] rounded-md", rows: 4 %>
     </div>
 
-    <div class="field">
-      <%= form.label :image_url, class: "block text-sm font-medium text-[var(--color-pastel-purple)]" %>
-      <%= form.text_field :image_url, class: "mt-1 block w-full p-2 border-2 border-[var(--color-pastel-blue)] rounded-md" %>
-    </div>
+    <%= render "shared/file_input", form: form, field: :image, label_text: 'イベント画像', dom_id: 'file-name' %>
 
     <div class="field">
       <%= form.label :event_start_at, class: "block text-sm font-medium text-[var(--color-pastel-purple)]" %>

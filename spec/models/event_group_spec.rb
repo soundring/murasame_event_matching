@@ -20,17 +20,6 @@ RSpec.describe EventGroup, type: :model do
   end
 
   describe 'callbacks' do
-    it 'image_urlがnilの場合、デフォルトのURLが設定されること' do
-      event_group = EventGroup.create(name: 'Test Group', user: user)
-      expect(event_group.image_url).to eq('https://pbs.twimg.com/profile_banners/893121515847155712/1734629052/1500x500')
-    end
-
-    it 'image_urlが設定されている場合、デフォルトのURLを上書きしないこと' do
-      custom_url = 'http://example.com/custom_image.jpg'
-      event_group = EventGroup.create(name: 'Test Group',  user: user, image_url: custom_url)
-      expect(event_group.image_url).to eq(custom_url)
-    end
-
     it '作成時に作成者が管理者として追加されること' do
       event_group = EventGroup.create(name: 'テストグループ', user: user)
       expect(event_group.admin_users).to include(user)
@@ -50,6 +39,18 @@ RSpec.describe EventGroup, type: :model do
 
     it 'ユーザーが渡されなかった場合、falseを返すこと' do
       expect(event_group.admin?(nil)).to be false
+    end
+  end
+
+  describe '画像関連' do
+    it "画像を添付できること" do
+      file = fixture_file_upload(
+        Rails.root.join('spec/fixtures/test_image.jpg'),
+        'image/jpeg'
+      )
+
+      event_group.image.attach(file)
+      expect(event_group.image).to be_attached
     end
   end
 end

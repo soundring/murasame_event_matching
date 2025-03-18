@@ -1,4 +1,6 @@
 class Event < ApplicationRecord
+  include ImageValidatable
+
   belongs_to :eventable, polymorphic: true
 
   has_many :event_participants, dependent: :destroy
@@ -6,6 +8,8 @@ class Event < ApplicationRecord
 
   has_many :event_waitlists, dependent: :destroy
   has_many :waitlisted_users, through: :event_waitlists, source: :user
+
+  has_one_attached :image
 
   validates :title, presence: true
   validates :event_start_at, presence: true

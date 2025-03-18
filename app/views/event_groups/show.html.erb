@@ -6,15 +6,16 @@
 
     <div class="flex space-x-4">
       <%= link_to 'イベント一覧', polymorphic_path([@event_group, :events]), class: "bg-[var(--color-pastel-purple)] filter hover:brightness-90 text-white font-bold py-2 px-4 rounded" %>
+      <%= link_to '編集', edit_event_group_path(@event_group), class: "bg-[var(--color-pastel-orange)] filter hover:brightness-90 text-white font-bold py-2 px-4 rounded" %>
       <% if @event_group.admin?(current_user)  %>
         <%= link_to '管理者管理', event_group_event_group_admins_path(@event_group), class: "bg-[var(--color-pastel-pink)] filter hover:brightness-90 text-white font-bold py-2 px-4 rounded" %>
       <% end %>  
     </div>
   </div>
 
-  <% if @event_group.image_url.present? %>
+  <% if @event_group.image.attached? %>
     <div class="w-full max-h-64 aspect-[16/9] rounded-md overflow-hidden">
-      <%= image_tag @event_group.image_url, class: "w-full h-full object-cover", alt: @event_group.name %>
+      <%= image_tag @event_group.image, class: "w-full h-full object-cover", alt: @event_group.name %>
     </div>
   <% else %>
     <div class="w-full max-h-64 aspect-[16/9] bg-gray-50 flex items-center justify-center rounded-md">

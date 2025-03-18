@@ -4,6 +4,22 @@ RSpec.describe "Events", type: :request do
   let(:user) { create(:user) }
   let(:event_group) { create(:event_group, user: user) }
 
+  let(:valid_image) do
+    file = fixture_file_upload(
+      Rails.root.join('spec/fixtures/test_image.jpg'),
+      'image/jpeg'
+    )
+    file
+  end
+
+  let(:invalid_file) do
+    file = fixture_file_upload(
+      Rails.root.join('spec/fixtures/test.txt'),
+      'text/plain'
+    )
+    file
+  end
+
   before { sign_in user }
 
   # TODO: 個人イベントの場合のテストを追加する
@@ -69,6 +85,30 @@ RSpec.describe "Events", type: :request do
         post event_group_events_path(event_group), params: { event: event_params }
       }.to change(Event, :count).by(1)
       expect(response).to redirect_to(event_group_events_path(event_group))
+    end
+
+    context '画像アップロードを含む場合' do
+      context '有効な画像の場合' do
+        it 'イベントが作成され画像が添付されること' do
+          params = event_params.merge(image: valid_image)
+          expect {
+            post event_group_events_path(event_group), params: { event: params }
+          }.to change(Event, :count).by(1)
+          event = Event.last
+          expect(event.image).to be_attached
+          expect(response).to redirect_to(event_group_events_path(event_group))
+        end
+      end
+
+      context '無効な画像の場合' do
+        it 'イベントが作成されずエラーが返ること' do
+          params = event_params.merge(image: invalid_file)
+          expect {
+            post event_group_events_path(event_group), params: { event: params }
+          }.not_to change(Event, :count)
+          expect(response).to have_http_status(422)
+        end
+      end
     end
 
     context '無効なパラメータの場合' do

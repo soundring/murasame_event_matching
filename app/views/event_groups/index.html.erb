@@ -8,17 +8,27 @@
 
   <div class="space-y-6">
     <% @event_groups.each do |event_group| %>
-      <div class="p-6 bg-white shadow-md rounded-lg border-2 border-[var(--color-pastel-pink)]">
-        <h3 class="text-xl font-semibold text-[var(--color-pastel-purple)] mb-2">
-          <%= event_group.name %>
-        </h3>
-        <p class="text-[var(--color-pastel-brown)] mb-4">
-          <%= event_group.description %>
-        </p>
-        <div class="flex space-x-2">
-          <%= link_to '詳細', event_group, class: "bg-[var(--color-pastel-purple)] filter hover:brightness-90 text-white font-bold py-2 px-4 rounded" %>
-          <%= link_to '編集', edit_event_group_path(event_group), class: "bg-[var(--color-pastel-orange)] filter hover:brightness-90 text-white font-bold py-2 px-4 rounded" %>
-          <%= link_to '削除', event_group, method: :delete, data: { turbo_method: :delete, turbo_confirm: '削除してよろしいですか？' }, class: "bg-[var(--color-pastel-red)] filter hover:brightness-90 text-white font-bold py-2 px-4 rounded" %>
+      <div class="p-6 bg-white shadow-md rounded-lg border-2 border-[var(--color-pastel-pink)] flex gap-6">
+        <div class="w-1/3 max-h-52 aspect-[16/9] rounded-md overflow-hidden bg-gray-200 flex items-center justify-center">
+          <% if event_group.image.attached? %>
+            <%= image_tag event_group.image, class: "w-full h-full object-cover", alt: event_group.name %>
+          <% else %>
+            <span class="text-gray-500">画像がありません</span>
+          <% end %>
+        </div>
+
+        <div class="w-2/3 flex flex-col justify-between">
+          <h3 class="text-xl font-semibold text-[var(--color-pastel-purple)] mb-2">
+            <%= event_group.name %>
+          </h3>
+          <p class="text-[var(--color-pastel-brown)] mb-4">
+            <%= event_group.description %>
+          </p>
+          <div class="flex space-x-2">
+            <%= link_to '詳細', event_group, class: "bg-[var(--color-pastel-purple)] filter hover:brightness-90 text-white font-bold py-2 px-4 rounded" %>
+            <%= link_to '編集', edit_event_group_path(event_group), class: "bg-[var(--color-pastel-orange)] filter hover:brightness-90 text-white font-bold py-2 px-4 rounded" %>
+            <%= link_to '削除', event_group, method: :delete, data: { turbo_method: :delete, turbo_confirm: '削除してよろしいですか？' }, class: "bg-[var(--color-pastel-red)] filter hover:brightness-90 text-white font-bold py-2 px-4 rounded" %>
+          </div>
         </div>
       </div>
     <% end %>
