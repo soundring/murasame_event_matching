@@ -2,7 +2,7 @@ class EventGroupsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @event_groups = EventGroup.all
+    @event_groups = EventGroup.with_attached_image
   end
 
   def show
@@ -58,6 +58,6 @@ class EventGroupsController < ApplicationController
   end
 
   def event_group
-    @event_group ||= EventGroup.find(params[:id])
+    @event_group ||= EventGroup.with_attached_image.find(params[:id])
   end
 end
