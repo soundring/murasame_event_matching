@@ -1,0 +1,89 @@
+ja:
+  devise:
+    confirmations:
+      confirmed: "メールアドレスの確認が完了しました。"
+      send_instructions: "メールアドレスの確認方法を数分以内にメールでご連絡します。"
+      send_paranoid_instructions: "メールアドレスが登録済みの場合、数分以内にメールアドレスの確認方法をメールでご連絡します。"
+    failure:
+      already_authenticated: "既にログインしています。"
+      inactive: "アカウントはまだ有効化されていません。"
+      invalid: "メールアドレスまたはパスワードが正しくありません。"
+      locked: "アカウントがロックされています。"
+      last_attempt: "もう一回ログインに失敗すると、アカウントがロックされます。"
+      not_found_in_database: "メールアドレスまたはパスワードが正しくありません。"
+      timeout: "セッションがタイムアウトしました。もう一度ログインしてください。"
+      unauthenticated: "続けるにはログインまたはアカウント登録が必要です。"
+      unconfirmed: "続けるにはメールアドレスの確認が必要です。"
+    mailer:
+      confirmation_instructions:
+        subject: "アカウントの確認手順"
+      reset_password_instructions:
+        subject: "パスワードの再設定手順"
+      unlock_instructions:
+        subject: "アカウントのロック解除手順"
+      email_changed:
+        subject: "メールアドレスの変更"
+      password_change:
+        subject: "パスワードの変更"
+    omniauth_callbacks:
+      failure: "%{kind} アカウントによる認証に失敗しました。理由：（%{reason}）"
+      success: "%{kind} アカウントによる認証に成功しました。"
+    passwords:
+      no_token: "パスワードリセットのメール以外からこのページにアクセスすることはできません。パスワードリセットのメールからアクセスされた場合には、URLをご確認ください。"
+      send_instructions: "パスワードの再設定方法を数分以内にメールでご連絡します。"
+      send_paranoid_instructions: "メールアドレスが登録済みの場合、数分以内にパスワード再設定用のリンクをメールでご連絡します。"
+      updated: "パスワードが正しく変更されました。ログインしました。"
+      updated_not_active: "パスワードが正しく変更されました。"
+      new:
+        title: "パスワードをお忘れですか？"
+        submit: "パスワード再設定手順を送信"
+      edit:
+        title: "パスワード変更"
+        submit: "パスワードを変更"
+    registrations:
+      destroyed: "アカウントを削除しました。またのご利用をお待ちしております。"
+      signed_up: "アカウント登録が完了しました。"
+      signed_up_but_inactive: "アカウント登録が完了しました。ただし、アカウントが有効化されていないため、ログインできません。"
+      signed_up_but_locked: "アカウント登録が完了しました。ただし、アカウントがロックされているため、ログインできません。"
+      signed_up_but_unconfirmed: "確認メールを、登録したメールアドレス宛に送信しました。メールに記載されたリンクを開いてアカウントを有効化してください。"
+      update_needs_confirmation: "アカウント情報が更新されました。新しいメールアドレスの確認が必要です。メールを確認し、記載されたリンクを開いて新しいメールアドレスを有効化してください。"
+      updated: "アカウント情報が更新されました。"
+      updated_but_not_signed_in: "アカウント情報が更新されました。パスワードが変更されたため、再度ログインしてください。"
+      new:
+        title: "アカウント登録"
+        submit: "登録"
+        minimum_password_length: "%{length}文字以上"
+    sessions:
+      signed_in: "ログインしました。"
+      signed_out: "ログアウトしました。"
+      already_signed_out: "既にログアウトしています。"
+      new:
+        title: "ログイン"
+        submit: "ログイン"
+    unlocks:
+      send_instructions: "アカウントのロック解除方法を数分以内にメールでご連絡します。"
+      send_paranoid_instructions: "アカウントが存在する場合、数分以内にアカウントのロック解除方法をメールでご連絡します。"
+      unlocked: "アカウントのロックが解除されました。続けるにはログインしてください。"
+    links:
+      sign_up: "アカウント登録"
+      sign_in: "ログイン"
+      forgot_password: "パスワードを忘れた場合"
+      confirmation_instructions: "確認メールの再送信"
+      unlock_instructions: "アカウントのロック解除方法"
+      sign_out: "ログアウト"
+  activerecord:
+    attributes:
+      user:
+        email: "メールアドレス"
+        password: "パスワード"
+        password_confirmation: "パスワード（確認用）"
+  errors:
+    messages:
+      already_confirmed: "は既に確認済みです。ログインしてください"
+      confirmation_period_expired: "の確認期限が切れました。%{period}以内に確認する必要があります。新しくリクエストしてください"
+      expired: "の有効期限が切れました。新しくリクエストしてください"
+      not_found: "は見つかりませんでした"
+      not_locked: "はロックされていません"
+      not_saved:
+        one: "1件のエラーが発生したため、%{resource}は保存されませんでした："
+        other: "%{count}件のエラーが発生したため、%{resource}は保存されませんでした："

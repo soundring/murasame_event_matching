@@ -18,7 +18,6 @@
         <% end %>
       <% else %>
         <%= link_to '参加登録', new_event_participant_path(event_id: @event.id),
-            data: { turbo: true },
             class: "bg-[var(--color-pastel-pink)] filter hover:brightness-90 text-white font-bold py-2 px-4 rounded" %>
       <% end %>
     </div>

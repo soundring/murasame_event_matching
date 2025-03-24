@@ -1,10 +1,6 @@
 <%= turbo_frame_tag "admin_user_#{event_group_admin.id}" do %>
   <div class="p-3 border-b">
-    <% if flash.now[:alert] %>
-      <div class="bg-[var(--color-pastel-red)] text-white p-2 rounded-lg mb-2">
-        <%= flash.now[:alert] %>
-      </div>
-    <% end %>
+    <%= render "shared/error_messages", resource: event_group_admin, alert: flash.now[:alert] %>
 
     <div class="flex justify-between items-center">
       <span class="text-gray-800"><%= event_group_admin.user.email %></span>

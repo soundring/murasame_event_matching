@@ -1,11 +1,7 @@
 <%= turbo_frame_tag 'form' do %>
-  <% if flash.now[:alert] %>
-    <div class="bg-[var(--color-pastel-red)] text-white p-3 rounded-lg mb-4">
-      <%= flash.now[:alert] %>
-    </div>
-  <% end %>
+  <%= render "shared/error_messages", resource: event_group_admin %>
 
-  <%= form_with model: event_group_admin, url: event_group_event_group_admins_path(event_group), local: true, class: "space-y-4" do |form| %>
+  <%= form_with model: event_group_admin, url: event_group_event_group_admins_path(event_group), class: "space-y-4" do |form| %>
     <%= form.hidden_field :event_group_id, value: event_group.id %>
 
     <div>
