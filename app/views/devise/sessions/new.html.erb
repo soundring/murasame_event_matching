@@ -3,13 +3,7 @@
 
   <div class="bg-white p-6 rounded-lg shadow-md border-2 border-[var(--color-pastel-pink)] space-y-4">
     <%= form_for(resource, as: resource_name, url: session_path(resource_name), class: "space-y-4") do |f| %>
-      <% if alert %>
-        <div class="p-4 bg-red-50 border-2 border-red-200 rounded space-y-2">
-          <div class="text-[var(--color-pastel-red)]">
-            <%= alert %>
-          </div>
-        </div>
-      <% end %>
+      <%= render "shared/error_messages", resource: resource %>
       <div class="field space-y-2">
         <%= f.label :email, t('activerecord.attributes.user.email'), class: "block text-sm font-medium text-[var(--color-pastel-purple)]" %>
         <%= f.email_field :email, autofocus: true, autocomplete: "email", 

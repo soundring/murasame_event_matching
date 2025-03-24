@@ -3,7 +3,7 @@
 
   <div class="bg-white p-6 rounded-lg shadow-md border-2 border-[var(--color-pastel-pink)] space-y-4">
     <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
-      <%= render "devise/shared/error_messages", resource: resource %>
+      <%= render "shared/error_messages", resource: resource %>
       <%= f.hidden_field :reset_password_token %>
 
       <div class="field space-y-2">
