@@ -40,6 +40,19 @@ RSpec.describe EventGroup, type: :model do
       expect(EventGroupAdmin.count).to eq event_group_admins_count
     end
   end
+
+  describe '#owner?' do
+    it 'グループの作成者の場合、trueを返すこと' do
+      expect(event_group.owner?(user)).to be true
+    end
+
+    it 'グループの作成者でない場合、falseを返すこと' do
+      expect(event_group.owner?(other_user)).to be false
+    end
+
+    it 'ユーザーが渡されなかった場合、falseを返すこと' do
+      expect(event_group.owner?(nil)).to be false
+    end
   end
 
   describe '#admin?' do
