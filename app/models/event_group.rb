@@ -24,6 +24,6 @@ class EventGroup < ApplicationRecord
   private
 
   def add_creator_as_admin
-    event_group_admins.create(user: user)
+    event_group_admins.create!(user: user)
   end
 end

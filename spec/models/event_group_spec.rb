@@ -20,10 +20,26 @@ RSpec.describe EventGroup, type: :model do
   end
 
   describe 'callbacks' do
-    it '作成時に作成者が管理者として追加されること' do
+    it 'イベントグループ作成時に作成者が管理者として追加されること' do
       event_group = EventGroup.create(name: 'テストグループ', user: user)
       expect(event_group.admin_users).to include(user)
     end
+
+    it '管理者追加に失敗した場合、イベントグループが作成されないこと' do
+      event_groups_count = EventGroup.count
+      event_group_admins_count = EventGroupAdmin.count
+
+      event_group = build(:event_group, user: user)
+      allow(event_group).to receive(:add_creator_as_admin).and_raise(ActiveRecord::RecordInvalid)
+
+      expect {
+        event_group.save!
+      }.to raise_error(ActiveRecord::RecordInvalid)
+
+      expect(EventGroup.count).to eq event_groups_count
+      expect(EventGroupAdmin.count).to eq event_group_admins_count
+    end
+  end
   end
 
   describe '#admin?' do
