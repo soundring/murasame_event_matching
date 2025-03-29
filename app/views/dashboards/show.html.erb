@@ -2,9 +2,47 @@
   <h2 class="text-3xl font-bold text-[var(--color-pastel-purple)]">ダッシュボード</h2>
   
   <div>
-    <h3 class="text-2xl font-bold text-[var(--color-pastel-purple)]">参加予定のイベント一覧</h3>
-    TODO
-    <h3 class="text-2xl font-bold text-[var(--color-pastel-purple)]">管理者となってるグループのイベント一覧</h3>
-    TODO
+    <div class="border border-[var(--color-pastel-pink)] rounded-lg p-4 mb-8 shadow-sm bg-white/50">
+      <h3 class="text-2xl font-bold text-[var(--color-pastel-purple)] mb-4">参加予定のイベント一覧</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <% @participating_events.each do |event| %>
+          <%= render "event_card", event: event %>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="border border-[var(--color-pastel-pink)] rounded-lg p-4 mb-8 shadow-sm bg-white/50">
+      <h3 class="text-2xl font-bold text-[var(--color-pastel-purple)] mb-4">主催イベント一覧</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <% @administered_events.each do |event| %>
+          <%= render "event_card", event: event %>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="border border-[var(--color-pastel-pink)] rounded-lg p-4 mb-8 shadow-sm bg-white/50">
+      <h3 class="text-2xl font-bold text-[var(--color-pastel-purple)] mb-4">管理者となってるグループ一覧</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <% @administered_groups.each do |group| %>
+          <div class="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow">
+            <div class="flex gap-4">
+              <div class="flex-shrink-0 w-24 h-24">
+                <% if group.image.attached? %>
+                  <%= image_tag group.image, class: "w-full h-full object-cover rounded-lg" %>
+                <% else %>
+                  <div class="w-full h-full bg-gray-200 rounded-lg flex items-center justify-center">
+                    <span class="text-gray-400 text-xs">画像がありません</span>
+                  </div>
+                <% end %>
+              </div>
+              <div>
+                <h4 class="text-lg font-bold text-[var(--color-pastel-purple)]"><%= link_to group.name, event_group_path(group), class: "hover:underline" %></h4>
+                <p><%= group.description %></p>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
   </div>
 </div>
