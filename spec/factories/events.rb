@@ -1,18 +1,26 @@
 FactoryBot.define do
   factory :event do
-    title { "テストイベント" }
-    event_start_at { Date.current + 1.day }
-    event_end_at { Date.current + 2.days }
-    recruitment_start_at { Date.current }
-    recruitment_closed_at { Date.current + 1.day }
+    sequence(:title) { |n| "テストイベント#{n}" }
+    recruitment_start_at { Time.current + 1.minute }
+    event_start_at { recruitment_start_at + 1.minute }
+    event_end_at { event_start_at + 1.hour }
+    recruitment_closed_at { recruitment_start_at + 30.minutes }
     max_participants { 10 }
     status { :draft }
     association :eventable, factory: :event_group
 
-    # TODO:  個人イベントを追加するためのトレイト
+    trait :past do
+      event_start_at { Time.current - 1.day }
+      event_end_at { Time.current - 12.hours }
+      recruitment_start_at { Time.current - 2.days }
+      recruitment_closed_at { Time.current - 1.day }
 
-    trait :group do
-      association :eventable, factory: :event_group
+      to_create { |instance| instance.save(validate: false) }
+    end
+
+    # 個人イベント
+    trait :personal do
+      association :eventable, factory: :user
     end
   end
 end
