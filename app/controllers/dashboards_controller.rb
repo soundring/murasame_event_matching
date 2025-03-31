@@ -3,9 +3,9 @@ class DashboardsController < ApplicationController
 
   def show
     @participating_events = current_user.participating_events
-                                      .includes(:eventable)
-                                      .where(status: 'published')
-                                      .where('event_start_at >= ?', Date.current)
+                                      .includes(:eventable, eventable: :events)
+                                      .published
+                                      .now_than_after
                                       .order(event_start_at: :asc)
                                       .limit(5)
 
@@ -18,7 +18,7 @@ class DashboardsController < ApplicationController
     @administered_events = Event.preload(:eventable)
                             .where(eventable_type: 'EventGroup',
                                    eventable_id: current_user.administered_group_ids)
-                            .where('event_start_at >= ?', Date.current)
+                            .now_than_after
                             .order(event_start_at: :asc)
                             .limit(5)
   end

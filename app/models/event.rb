@@ -24,6 +24,9 @@ class Event < ApplicationRecord
   validate :event_start_cannot_be_in_past, if: -> { event_start_at.present? }
   validate :recruitment_start_cannot_be_in_past, if: -> { recruitment_start_at.present? }
 
+  scope :published, -> { where(status: :published) }
+  scope :now_than_after, -> { where('event_start_at >= ?', Time.current) }
+
   def full?
     return false if max_participants.nil?
     participants.count >= max_participants
