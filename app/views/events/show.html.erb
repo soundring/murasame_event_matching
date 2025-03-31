@@ -51,19 +51,19 @@
 
     <div>
       <h3 class="text-[var(--color-pastel-brown)] text-lg font-bold">イベント開始日時:</h3>
-      <p><%= @event.event_start_at %></p>
+      <p><%= l @event.event_start_at, format: :long  %></p>
     </div>
     <div>
       <h3 class="text-[var(--color-pastel-brown)] text-lg font-bold">イベント終了日時:</h3>
-      <p><%= @event.event_end_at %></p>
+      <p><%= l @event.event_end_at, format: :long  %></p>
     </div>
     <div>
       <h3 class="text-[var(--color-pastel-brown)] text-lg font-bold">募集開始日時:</h3>
-      <p><%= @event.recruitment_start_at %></p>
+      <p><%= l @event.recruitment_start_at, format: :long  %></p>
     </div>
     <div>
       <h3 class="text-[var(--color-pastel-brown)] text-lg font-bold">募集終了日時:</h3>
-      <p><%= @event.recruitment_closed_at %></p>
+      <p><%= l @event.recruitment_closed_at, format: :long  %></p>
     </div>
     <div>
       <h3 class="text-[var(--color-pastel-brown)] text-lg font-bold">場所:</h3>

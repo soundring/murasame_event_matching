@@ -49,10 +49,11 @@ event_groups.each do |group|
   # グループごとに2つのイベントを作成
   2.times do |n|
     # 時間の設定をバリエーション付きで
-    start_time = Time.current + (n+1).days + n.hours
+    current_time = Time.current
+    recruitment_start = current_time + 1.hour + n.hours  # 現在時刻から十分に未来の時間を設定
+    start_time = recruitment_start + n.hours
     end_time = start_time + 2.hours
-    recruitment_start = Time.current + n.hours
-    recruitment_end = start_time - 1.hour
+    recruitment_end = end_time + 1.hour
 
     # ステータスをバリエーション付きで
     status = case n

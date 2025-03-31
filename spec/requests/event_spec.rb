@@ -23,7 +23,7 @@ RSpec.describe "Events", type: :request do
       title: 'New Event',
       event_start_at: Time.current + 1.day,
       event_end_at: Time.current + 2.days,
-      recruitment_start_at: Time.current,
+      recruitment_start_at: Time.current + 1.minute,
       recruitment_closed_at: Time.current + 1.day,
       max_participants: 10
     }
