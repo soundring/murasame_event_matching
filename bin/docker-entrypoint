@@ -1,5 +1,18 @@
 #!/bin/bash -e
 
+# データベースの初期化（存在しない場合のみ）
+if [ ! -f storage/production.sqlite3 ]; then
+  echo "データベースファイルが見つかりません。初期化を行います..."
+  ./bin/rails db:create
+  ./bin/rails db:migrate
+  ./bin/rails db:seed
+  echo "データベース初期化完了"
+else
+  # 既存DBに対してはマイグレーションのみ実行
+  echo "既存のデータベースにマイグレーションを適用します..."
+  ./bin/rails db:migrate
+fi
+
 # Enable jemalloc for reduced memory usage and latency.
 if [ -z "${LD_PRELOAD+x}" ]; then
     LD_PRELOAD=$(find /usr/lib -name libjemalloc.so.2 -print -quit)
