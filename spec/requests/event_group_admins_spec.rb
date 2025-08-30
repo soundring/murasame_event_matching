@@ -110,10 +110,10 @@ RSpec.describe "EventGroupAdmins", type: :request do
   end
 
   describe "DELETE /destroy" do
-    let(:admin_user) { create(:user) }
-    let!(:event_group_admin) { create(:event_group_admin, user: admin_user, event_group: event_group) }
 
     context 'イベントグループのオーナーの場合' do
+      let(:admin_user) { create(:user) }
+      let!(:event_group_admin) { create(:event_group_admin, user: admin_user, event_group: event_group) }
       before { sign_in owner }
 
       context '他の管理者を削除するとき' do
@@ -132,7 +132,7 @@ RSpec.describe "EventGroupAdmins", type: :request do
         it '削除されずリダイレクトすること' do
           expect {
             delete event_group_event_group_admin_path(event_group, owner_admin)
-          }.not_to change(EventGroupAdmin, :count)
+          }.not.to change(EventGroupAdmin, :count)
           expect(response).to have_http_status(:see_other)
           expect(response).to redirect_to(event_group_event_group_admins_path(event_group))
           expect(flash[:alert]).to eq('オーナーは削除できません。')
@@ -140,7 +140,26 @@ RSpec.describe "EventGroupAdmins", type: :request do
       end
     end
 
+    context 'イベントグループの管理者がオーナーを削除しようとする場合' do
+      let(:admin_user) { create(:user) }
+      let!(:admin_record) { create(:event_group_admin, user: admin_user, event_group: event_group) }
+      let(:owner_admin) { EventGroupAdmin.find_by(user: owner, event_group: event_group) }
+      before { sign_in admin_user }
+
+      it '削除されずリダイレクトすること' do
+        expect {
+          delete event_group_event_group_admin_path(event_group, owner_admin),
+                 headers: { 'ACCEPT' => 'text/vnd.turbo-stream.html' }
+        }.not_to change(EventGroupAdmin, :count)
+        expect(response).to have_http_status(:see_other)
+        expect(response).to redirect_to(event_group_event_group_admins_path(event_group))
+        expect(flash[:alert]).to eq('オーナーは削除できません。')
+      end
+    end
+
     context 'イベントグループの管理者ではない場合' do
+      let(:admin_user) { create(:user) }
+      let!(:event_group_admin) { create(:event_group_admin, user: admin_user, event_group: event_group) }
       let(:user) { create(:user) }
       before { sign_in user }
 
