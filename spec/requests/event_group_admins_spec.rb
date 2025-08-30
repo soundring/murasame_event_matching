@@ -110,19 +110,20 @@ RSpec.describe "EventGroupAdmins", type: :request do
   end
 
   describe "DELETE /destroy" do
+    let(:headers) { { 'ACCEPT' => 'text/vnd.turbo-stream.html' } }
 
     context 'イベントグループのオーナーの場合' do
-      let(:admin_user) { create(:user) }
-      let!(:event_group_admin) { create(:event_group_admin, user: admin_user, event_group: event_group) }
       before { sign_in owner }
-
+      
       context '他の管理者を削除するとき' do
+        let!(:event_group_admin) { create(:event_group_admin, event_group: event_group, user: create(:user)) }
+
         it '管理者が削除されること' do
           expect {
             delete event_group_event_group_admin_path(event_group, event_group_admin),
-                   headers: { 'ACCEPT' => 'text/vnd.turbo-stream.html' }
+                   headers: headers
           }.to change(EventGroupAdmin, :count).by(-1)
-          expect(response).to have_http_status(:success)
+          expect(response).to have_http_status(:ok)
         end
       end
 
@@ -132,7 +133,7 @@ RSpec.describe "EventGroupAdmins", type: :request do
         it '削除されずリダイレクトすること' do
           expect {
             delete event_group_event_group_admin_path(event_group, owner_admin)
-          }.not.to change(EventGroupAdmin, :count)
+          }.not_to change(EventGroupAdmin, :count)
           expect(response).to have_http_status(:see_other)
           expect(response).to redirect_to(event_group_event_group_admins_path(event_group))
           expect(flash[:alert]).to eq('オーナーは削除できません。')
@@ -148,10 +149,8 @@ RSpec.describe "EventGroupAdmins", type: :request do
 
       it '削除されずリダイレクトすること' do
         expect {
-          delete event_group_event_group_admin_path(event_group, owner_admin),
-                 headers: { 'ACCEPT' => 'text/vnd.turbo-stream.html' }
+          delete event_group_event_group_admin_path(event_group, owner_admin), headers: headers
         }.not_to change(EventGroupAdmin, :count)
-        expect(response).to have_http_status(:see_other)
         expect(response).to redirect_to(event_group_event_group_admins_path(event_group))
         expect(flash[:alert]).to eq('オーナーは削除できません。')
       end

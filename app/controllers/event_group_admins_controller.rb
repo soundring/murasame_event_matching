@@ -16,8 +16,7 @@ class EventGroupAdminsController < ApplicationController
     @event_group_admin = EventGroupAdmin.new(event_group_admin_params)
     authorize @event_group_admin
 
-    if @event_group_admin.save
-    else
+    unless @event_group_admin.save
       flash[:alert] = '登録に失敗しました。'
       redirect_to event_group_event_group_admins_path(@event_group_admin.event_group)
     end
@@ -26,22 +25,19 @@ class EventGroupAdminsController < ApplicationController
   def destroy
     authorize event_group_admin
 
-    event_group = event_group_admin.event_group
-    target_user = event_group_admin.user
-
-    if event_group.owner?(target_user)
-      flash[:alert] = 'オーナーは削除できません。'
-      redirect_to event_group_event_group_admins_path(event_group), status: :see_other
-    else
-      if event_group_admin.destroy
-      else
-        flash[:alert] = '削除に失敗しました。'
-        redirect_to event_group_event_group_admins_path(event_group), status: :see_other
-      end
+    unless event_group_admin.destroy
+      handle_destroy_failure('削除に失敗しました。')
     end
+  rescue Pundit::NotAuthorizedError
+    handle_destroy_failure('オーナーは削除できません。')
   end
 
   private
+
+  def handle_destroy_failure(message)
+    flash[:alert] = message
+    redirect_to event_group_event_group_admins_path(event_group_admin.event_group), status: :see_other
+  end
 
   def event_group_admin_params
     params.require(:event_group_admin)
