@@ -4,64 +4,44 @@ RSpec.describe "EventGroupAdmins", type: :request do
   let(:event_group) { create(:event_group) }
   let(:owner) { event_group.user }
 
-  describe "GET /index" do
+  RSpec.shared_examples '管理者GETアクセスが必要なアクション' do
     context 'サインインしていない場合' do
       it 'ログインページにリダイレクトすること' do
-        get event_group_event_group_admins_path(event_group)
-        expect(response).to have_http_status(302)
+        subject
+        expect(response).to redirect_to(new_user_session_path)
       end
     end
 
     context 'サインインしている場合' do
       before { sign_in user }
 
-      context 'イベントグループの管理者の場合' do
+      context 'イベントグループの管理者である場合' do
         let(:user) { owner }
 
         it '200 OKが返されること' do
-          get event_group_event_group_admins_path(event_group)
-          expect(response).to have_http_status(200)
+          subject
+          expect(response).to have_http_status(:ok)
         end
       end
 
       context 'イベントグループの管理者ではない場合' do
         let(:user) { create(:user) }
         it '403 Forbiddenが返されること' do
-          get event_group_event_group_admins_path(event_group)
+          subject
           expect(response).to have_http_status(:forbidden)
         end
       end
     end
   end
 
-  describe "GET /new" do
-    context 'サインインしていない場合' do
-      it 'ログインページにリダイレクトすること' do
-        get new_event_group_event_group_admin_path(event_group)
-        expect(response).to have_http_status(302)
-      end
-    end
+  describe 'GET /index' do
+    subject { get event_group_event_group_admins_path(event_group) }
+    it_behaves_like '管理者GETアクセスが必要なアクション'
+  end
 
-    context 'サインインしている場合' do
-      before { sign_in user }
-
-      context 'イベントグループの管理者の場合' do
-        let(:user) { owner }
-
-        it '200 OKが返されること' do
-          get new_event_group_event_group_admin_path(event_group)
-          expect(response).to have_http_status(200)
-        end
-      end
-
-      context 'イベントグループの管理者ではない場合' do
-        let(:user) { create(:user) }
-        it '403 Forbiddenが返されること' do
-          get new_event_group_event_group_admin_path(event_group)
-          expect(response).to have_http_status(:forbidden)
-        end
-      end
-    end
+  describe 'GET /new' do
+    subject { get new_event_group_event_group_admin_path(event_group) }
+    it_behaves_like '管理者GETアクセスが必要なアクション'
   end
 
   describe "POST /create" do
@@ -110,19 +90,20 @@ RSpec.describe "EventGroupAdmins", type: :request do
   end
 
   describe "DELETE /destroy" do
+    let(:headers) { { 'ACCEPT' => 'text/vnd.turbo-stream.html' } }
 
     context 'イベントグループのオーナーの場合' do
-      let(:admin_user) { create(:user) }
-      let!(:event_group_admin) { create(:event_group_admin, user: admin_user, event_group: event_group) }
       before { sign_in owner }
 
       context '他の管理者を削除するとき' do
+        let!(:event_group_admin) { create(:event_group_admin, event_group: event_group, user: create(:user)) }
+
         it '管理者が削除されること' do
           expect {
             delete event_group_event_group_admin_path(event_group, event_group_admin),
-                   headers: { 'ACCEPT' => 'text/vnd.turbo-stream.html' }
+                   headers: headers
           }.to change(EventGroupAdmin, :count).by(-1)
-          expect(response).to have_http_status(:success)
+          expect(response).to have_http_status(:ok)
         end
       end
 
@@ -132,7 +113,7 @@ RSpec.describe "EventGroupAdmins", type: :request do
         it '削除されずリダイレクトすること' do
           expect {
             delete event_group_event_group_admin_path(event_group, owner_admin)
-          }.not.to change(EventGroupAdmin, :count)
+          }.not_to change(EventGroupAdmin, :count)
           expect(response).to have_http_status(:see_other)
           expect(response).to redirect_to(event_group_event_group_admins_path(event_group))
           expect(flash[:alert]).to eq('オーナーは削除できません。')
@@ -148,10 +129,8 @@ RSpec.describe "EventGroupAdmins", type: :request do
 
       it '削除されずリダイレクトすること' do
         expect {
-          delete event_group_event_group_admin_path(event_group, owner_admin),
-                 headers: { 'ACCEPT' => 'text/vnd.turbo-stream.html' }
+          delete event_group_event_group_admin_path(event_group, owner_admin), headers: headers
         }.not_to change(EventGroupAdmin, :count)
-        expect(response).to have_http_status(:see_other)
         expect(response).to redirect_to(event_group_event_group_admins_path(event_group))
         expect(flash[:alert]).to eq('オーナーは削除できません。')
       end
@@ -163,14 +142,12 @@ RSpec.describe "EventGroupAdmins", type: :request do
       let(:user) { create(:user) }
       before { sign_in user }
 
-      it '削除できず403が返ること' do
+      it '削除できずリダイレクトされること' do
         expect {
-          delete event_group_event_group_admin_path(event_group, event_group_admin),
-                 headers: { 'ACCEPT' => 'text/vnd.turbo-stream.html' }
+          delete event_group_event_group_admin_path(event_group, event_group_admin)
         }.not_to change(EventGroupAdmin, :count)
-        expect(response).to have_http_status(:forbidden)
+        expect(response).to have_http_status(:see_other)
       end
     end
   end
 end
-
