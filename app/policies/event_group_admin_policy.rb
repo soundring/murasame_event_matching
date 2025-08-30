@@ -15,6 +15,6 @@ class EventGroupAdminPolicy < ApplicationPolicy
   end
 
   def destroy?
-    record.event_group.admin?(user)
+    record.event_group.admin?(user) && !record.event_group.owner?(record.user)
   end
 end

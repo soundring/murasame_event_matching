@@ -11,9 +11,8 @@ RSpec.describe EventGroupPolicy do
   end
 
   context '管理者の場合' do
-    let(:admin_user) { create(:user) }
-    let(:user) { admin_user }
-    let!(:event_group_admin) { create(:event_group_admin, user: admin_user, event_group: event_group) }
+    let(:user) { create(:user) }
+    let!(:event_group_admin) { create(:event_group_admin, user: user, event_group: event_group) }
 
     it { is_expected.to permit_only_actions(%i[index show new create edit update]) }
     it { is_expected.to forbid_actions(%i[destroy]) }
