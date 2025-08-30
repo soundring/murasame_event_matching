@@ -99,6 +99,7 @@ RSpec.describe "EventGroupAdmins", type: :request do
       before { sign_in other_user }
 
       it '管理者が追加されず、403 Forbiddenが返されること' do
+        event_group
         expect {
           post event_group_event_group_admins_path(event_group),
                params: { event_group_admin: { user_id: new_user.id, event_group_id: event_group.id } }

@@ -8,7 +8,7 @@ class EventGroupAdminsController < ApplicationController
 
   def new
     @event_group = event_group
-    @event_group_admin = EventGroupAdmin.new
+    @event_group_admin = @event_group.event_group_admins.new
     authorize @event_group_admin
   end
 
