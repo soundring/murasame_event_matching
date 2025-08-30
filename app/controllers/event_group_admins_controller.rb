@@ -16,8 +16,7 @@ class EventGroupAdminsController < ApplicationController
     @event_group_admin = EventGroupAdmin.new(event_group_admin_params)
     authorize @event_group_admin
 
-    if @event_group_admin.save
-    else
+    unless @event_group_admin.save
       flash[:alert] = '登録に失敗しました。'
       redirect_to event_group_event_group_admins_path(@event_group_admin.event_group)
     end
