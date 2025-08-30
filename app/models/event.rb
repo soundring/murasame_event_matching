@@ -12,15 +12,32 @@ class Event < ApplicationRecord
   has_one_attached :image
 
   validates :title, presence: true
-  validates :recruitment_start_at, presence: true
-  validates :event_start_at, presence: true
-  validates :event_end_at, presence: true, comparison: { greater_than: :event_start_at }
-  validates :recruitment_closed_at, presence: true, comparison: { greater_than: :recruitment_start_at }
+  validates :recruitment_start_at, presence: true,
+                                    comparison: {
+                                      greater_than_or_equal_to: -> { Time.current },
+                                      message: "は現在日時以降にしてください。"
+                                    }
+  validates :event_start_at, presence: true,
+                              comparison: {
+                                greater_than_or_equal_to: -> { Time.current },
+                                message: "は現在日時以降にしてください。"
+                              }
+  validates :event_start_at,
+            comparison: {
+              greater_than_or_equal_to: :recruitment_start_at,
+              message: "は募集開始日時以降にしてください。"
+            }
+  validates :event_end_at, presence: true,
+                           comparison: {
+                             greater_than: :event_start_at,
+                             message: "はイベント開始日時より後の日時にしてください。"
+                           }
+  validates :recruitment_closed_at, presence: true,
+                                    comparison: {
+                                      greater_than: :recruitment_start_at,
+                                      message: "は募集開始日時より後の日時にしてください。"
+                                    }
   validates :max_participants, numericality: { only_integer: true, greater_than: 0 }, allow_nil: true
-  validate :recruitment_start_at_validation
-  validate :event_start_at_validation
-  validate :event_end_at_validation
-  validate :recruitment_closed_at_validation
 
   enum :status, { draft: 0, published: 1, closed: 2 }
 
@@ -38,40 +55,5 @@ class Event < ApplicationRecord
 
   def registration_for(user)
     event_participants.find_by(user: user) || event_waitlists.find_by(user: user)
-  end
-
-  private
-
-  def recruitment_start_at_validation
-    return if recruitment_start_at.blank?
-
-    errors.add(:recruitment_start_at, "は現在日時以降にしてください。") if recruitment_start_at < Time.current
-  end
-
-  def event_start_at_validation
-    return if event_start_at.blank?
-
-    if event_start_at < Time.current
-      errors.add(:event_start_at, "は現在日時以降にしてください。")
-      return
-    end
-
-    return if recruitment_start_at.blank?
-
-    if event_start_at < recruitment_start_at
-      errors.add(:event_start_at, "は募集開始日時以降にしてください。")
-    end
-  end
-
-  def event_end_at_validation
-    return if event_end_at.blank? || event_start_at.blank?
-
-    errors.add(:event_end_at, "はイベント開始日時より後の日時にしてください。") if event_end_at <= event_start_at
-  end
-
-  def recruitment_closed_at_validation
-    return if recruitment_closed_at.blank? || recruitment_start_at.blank?
-
-    errors.add(:recruitment_closed_at, "は募集開始日時より後の日時にしてください。") if recruitment_closed_at <= recruitment_start_at
   end
 end
