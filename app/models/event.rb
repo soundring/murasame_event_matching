@@ -43,14 +43,20 @@ class Event < ApplicationRecord
   private
 
   def recruitment_start_at_validation
+    return if recruitment_start_at.blank?
+
     errors.add(:recruitment_start_at, "は現在日時以降にしてください。") if recruitment_start_at < Time.current
   end
 
   def event_start_at_validation
+    return if event_start_at.blank?
+
     if event_start_at < Time.current
       errors.add(:event_start_at, "は現在日時以降にしてください。")
       return
     end
+
+    return if recruitment_start_at.blank?
 
     if event_start_at < recruitment_start_at
       errors.add(:event_start_at, "は募集開始日時以降にしてください。")
@@ -58,10 +64,14 @@ class Event < ApplicationRecord
   end
 
   def event_end_at_validation
+    return if event_end_at.blank? || event_start_at.blank?
+
     errors.add(:event_end_at, "はイベント開始日時より後の日時にしてください。") if event_end_at <= event_start_at
   end
 
   def recruitment_closed_at_validation
+    return if recruitment_closed_at.blank? || recruitment_start_at.blank?
+
     errors.add(:recruitment_closed_at, "は募集開始日時より後の日時にしてください。") if recruitment_closed_at <= recruitment_start_at
   end
 end

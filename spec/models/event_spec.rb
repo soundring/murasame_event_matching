@@ -7,6 +7,22 @@ RSpec.describe Event, type: :model do
     expect(event.errors[:title]).to include("を入力してください。")
   end
 
+  it "必須の日時項目がnilでもバリデーションで例外が発生しないこと" do
+    event = build(
+      :event,
+      recruitment_start_at: nil,
+      event_start_at: nil,
+      event_end_at: nil,
+      recruitment_closed_at: nil
+    )
+
+    expect { event.valid? }.not_to raise_error
+    expect(event.errors[:recruitment_start_at]).to include("を入力してください。")
+    expect(event.errors[:event_start_at]).to include("を入力してください。")
+    expect(event.errors[:event_end_at]).to include("を入力してください。")
+    expect(event.errors[:recruitment_closed_at]).to include("を入力してください。")
+  end
+
   it "正しいenum値を持つこと" do
     expect(Event.statuses).to eq({ "draft" => 0, "published" => 1, "closed" => 2 })
   end
