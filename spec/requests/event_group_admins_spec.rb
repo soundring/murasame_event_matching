@@ -26,10 +26,9 @@ RSpec.describe "EventGroupAdmins", type: :request do
 
       context 'イベントグループの管理者ではない場合' do
         let(:user) { create(:user) }
-
-        it '200 OKが返されること' do
+        it '403 Forbiddenが返されること' do
           get event_group_event_group_admins_path(event_group)
-          expect(response).to have_http_status(200)
+          expect(response).to have_http_status(:forbidden)
         end
       end
     end
@@ -57,39 +56,54 @@ RSpec.describe "EventGroupAdmins", type: :request do
 
       context 'イベントグループの管理者ではない場合' do
         let(:user) { create(:user) }
-
-        it '200 OKが返されること' do
+        it '403 Forbiddenが返されること' do
           get new_event_group_event_group_admin_path(event_group)
-          expect(response).to have_http_status(200)
+          expect(response).to have_http_status(:forbidden)
         end
       end
     end
   end
 
   describe "POST /create" do
-    before { sign_in owner }
+    context '権限のあるユーザーの場合' do
+      before { sign_in owner }
 
-    context '有効なパラメータの場合' do
-      let(:new_user) { create(:user) }
+      context '有効なパラメータの場合' do
+        let(:new_user) { create(:user) }
 
-      it '管理者が追加されること' do
-        expect {
-          post event_group_event_group_admins_path(event_group),
-               params: { event_group_admin: { user_id: new_user.id, event_group_id: event_group.id } },
-               headers: { 'ACCEPT' => 'text/vnd.turbo-stream.html' }
-        }.to change(EventGroupAdmin, :count).by(1)
-        expect(response).to have_http_status(:success)
+        it '管理者が追加されること' do
+          expect {
+            post event_group_event_group_admins_path(event_group),
+                 params: { event_group_admin: { user_id: new_user.id, event_group_id: event_group.id } },
+                 headers: { 'ACCEPT' => 'text/vnd.turbo-stream.html' }
+          }.to change(EventGroupAdmin, :count).by(1)
+          expect(response).to have_http_status(:success)
+        end
+      end
+
+      context '無効なパラメータの場合' do
+        it '管理者が追加されずフラッシュメッセージが表示されること' do
+          expect {
+            post event_group_event_group_admins_path(event_group),
+                 params: { event_group_admin: { user_id: owner.id, event_group_id: event_group.id } }
+          }.not_to change(EventGroupAdmin, :count)
+          expect(response).to redirect_to(event_group_event_group_admins_path(event_group))
+          expect(flash[:alert]).to eq('登録に失敗しました。')
+        end
       end
     end
 
-    context '無効なパラメータの場合' do
-      it '管理者が追加されずフラッシュメッセージが表示されること' do
+    context '権限のないユーザーの場合' do
+      let(:other_user) { create(:user) }
+      let(:new_user) { create(:user) }
+      before { sign_in other_user }
+
+      it '管理者が追加されず、403 Forbiddenが返されること' do
         expect {
           post event_group_event_group_admins_path(event_group),
-               params: { event_group_admin: { user_id: owner.id, event_group_id: event_group.id } }
+               params: { event_group_admin: { user_id: new_user.id, event_group_id: event_group.id } }
         }.not_to change(EventGroupAdmin, :count)
-        expect(response).to redirect_to(event_group_event_group_admins_path(event_group))
-        expect(flash[:alert]).to eq('登録に失敗しました。')
+        expect(response).to have_http_status(:forbidden)
       end
     end
   end

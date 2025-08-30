@@ -1,20 +1,29 @@
 class EventGroupAdminPolicy < ApplicationPolicy
   def index?
-    # TODO グループの作成者か管理者ならOK
-    true
+    admin_or_owner?
   end
 
   def new?
-    # TODO グループの作成者か管理者ならOK
-    index?
+    admin_or_owner?
   end
 
   def create?
-    # TODO グループの作成者か管理者ならOK
-    index?
+    admin_or_owner?
   end
 
   def destroy?
     record.event_group.admin?(user)
+  end
+
+  private
+
+  def admin_or_owner?
+    event_group =
+      if record.respond_to?(:event_group)
+        record.event_group
+      elsif record.respond_to?(:proxy_association)
+        record.proxy_association.owner
+      end
+    event_group && (event_group.admin?(user) || event_group.user == user)
   end
 end
