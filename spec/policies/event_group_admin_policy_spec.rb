@@ -7,9 +7,8 @@ RSpec.describe EventGroupAdminPolicy do
   let(:event_group) { create(:event_group, user: owner) }
 
   context '管理者の場合' do
-    let(:user) { admin_user }
-    let(:admin_user) { create(:user) }
-    let!(:admin_record) { create(:event_group_admin, user: admin_user, event_group: event_group) }
+    let(:user) { create(:user) }
+    let!(:admin_record) { create(:event_group_admin, user: user, event_group: event_group) }
 
     context '削除対象がオーナーでない場合' do
       let(:event_group_admin) { create(:event_group_admin, event_group: event_group, user: create(:user)) }
