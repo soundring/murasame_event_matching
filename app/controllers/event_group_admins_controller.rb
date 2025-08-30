@@ -26,19 +26,14 @@ class EventGroupAdminsController < ApplicationController
   def destroy
     authorize event_group_admin
 
-    event_group = event_group_admin.event_group
-    target_user = event_group_admin.user
-
-    if event_group.owner?(target_user)
-      flash[:alert] = 'オーナーは削除できません。'
-      redirect_to event_group_event_group_admins_path(event_group), status: :see_other
+    if event_group_admin.destroy
     else
-      if event_group_admin.destroy
-      else
-        flash[:alert] = '削除に失敗しました。'
-        redirect_to event_group_event_group_admins_path(event_group), status: :see_other
-      end
+      flash[:alert] = '削除に失敗しました。'
+      redirect_to event_group_event_group_admins_path(event_group_admin.event_group), status: :see_other
     end
+  rescue Pundit::NotAuthorizedError
+    flash[:alert] = 'オーナーは削除できません。'
+    redirect_to event_group_event_group_admins_path(event_group_admin.event_group), status: :see_other
   end
 
   private
