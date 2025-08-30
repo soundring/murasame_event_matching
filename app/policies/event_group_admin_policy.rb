@@ -24,6 +24,6 @@ class EventGroupAdminPolicy < ApplicationPolicy
       elsif record.respond_to?(:proxy_association)
         record.proxy_association.owner
       end
-    event_group && (event_group.admin?(user) || event_group.user == user)
+    event_group&.admin?(user)
   end
 end
