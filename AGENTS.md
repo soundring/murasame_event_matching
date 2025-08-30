@@ -28,7 +28,7 @@ These guidelines standardize development for this Ruby on Rails project and ensu
 
 ## Quality Assurance Checklist
 Score each item from 0 to 10. Proceed only when the total is **80 or more out of 100**.
-
+For pass/fail items (e.g., command execution), score 10 for a pass and 0 for a fail.
 | Item | Score (0-10) |
 | --- | --- |
 | `bundle install` executed | |
