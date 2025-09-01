@@ -26,13 +26,16 @@ class EventPolicy < ApplicationPolicy
 
   class Scope < ApplicationPolicy::Scope
     def resolve
-      admin_group_ids = user&.administered_groups&.select(:id)
       non_draft = scope.where.not(status: :draft)
-      if admin_group_ids.present?
-        non_draft.or(scope.where(eventable_type: 'EventGroup', eventable_id: admin_group_ids))
-      else
-        non_draft
-      end
+      return non_draft unless user
+
+      personal_events = scope.where(eventable: user)
+      admin_group_events = scope.where(
+        eventable_type: 'EventGroup',
+        eventable_id: user.administered_groups.select(:id)
+      )
+
+      non_draft.or(personal_events).or(admin_group_events)
     end
   end
 end

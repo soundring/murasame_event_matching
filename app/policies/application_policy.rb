@@ -54,18 +54,15 @@ class ApplicationPolicy
   private
 
   def event_group
-    @event_group ||= case record
-                     when EventGroup
+    @event_group ||= if record.is_a?(EventGroup)
                        record
-                     else
-                       if record.respond_to?(:event_group)
-                         record.event_group
-                       elsif record.respond_to?(:eventable) && record.eventable.is_a?(EventGroup)
-                         record.eventable
-                       elsif record.respond_to?(:proxy_association)
-                         owner = record.proxy_association.owner
-                         owner if owner.is_a?(EventGroup)
-                       end
+                     elsif record.respond_to?(:event_group)
+                       record.event_group
+                     elsif record.respond_to?(:eventable) && record.eventable.is_a?(EventGroup)
+                       record.eventable
+                     elsif record.respond_to?(:proxy_association)
+                       owner = record.proxy_association.owner
+                       owner if owner.is_a?(EventGroup)
                      end
   end
 
