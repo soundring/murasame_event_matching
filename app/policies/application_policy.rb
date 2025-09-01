@@ -55,15 +55,15 @@ class ApplicationPolicy
 
   def event_group
     @event_group ||= if record.is_a?(EventGroup)
-                       record
-                     elsif record.respond_to?(:event_group)
-                       record.event_group
-                     elsif record.respond_to?(:eventable) && record.eventable.is_a?(EventGroup)
-                       record.eventable
-                     elsif record.respond_to?(:proxy_association)
-                       owner = record.proxy_association.owner
-                       owner if owner.is_a?(EventGroup)
-                     end
+      record
+    elsif record.respond_to?(:event_group)
+      record.event_group
+    elsif record.respond_to?(:eventable) && record.eventable.is_a?(EventGroup)
+      record.eventable
+    elsif record.respond_to?(:proxy_association)
+      owner = record.proxy_association.owner
+      owner if owner.is_a?(EventGroup)
+    end
   end
 
   def group_owner?(target_user = user)

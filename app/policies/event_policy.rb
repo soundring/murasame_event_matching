@@ -29,11 +29,11 @@ class EventPolicy < ApplicationPolicy
       non_draft = scope.where.not(status: :draft)
       return non_draft unless user
 
-      personal_events = scope.where(eventable: user)
-      admin_group_events = scope.where(
-        eventable_type: 'EventGroup',
-        eventable_id: user.administered_groups.select(:id)
-      )
+        personal_events = scope.where(eventable: user)
+        admin_group_events = scope.where(
+          eventable_type: EventGroup.name,
+          eventable_id: user.administered_groups.select(:id)
+        )
 
       non_draft.or(personal_events).or(admin_group_events)
     end
