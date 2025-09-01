@@ -53,34 +53,33 @@ RSpec.describe EventPolicy do
     end
   end
 
-  # TODO: 個人イベントの場合のテストを追加する
-  # context '個人イベントの場合' do
-  #   let(:event_owner) { create(:user) }
-  #   let(:eventable) { event_owner }
+  context '個人イベントの場合' do
+    let(:event_owner) { create(:user) }
+    let(:eventable) { event_owner }
 
-  #   context 'イベント作成者の場合' do
-  #     let(:user) { event_owner }
+    context 'イベント作成者の場合' do
+      let(:user) { event_owner }
 
-  #     it { is_expected.to permit_all_actions }
-  #   end
+      it { is_expected.to permit_all_actions }
+    end
 
-  #   context 'イベント作成者でない場合' do
-  #     let(:user) { create(:user) }
+    context 'イベント作成者でない場合' do
+      let(:user) { create(:user) }
 
-  #     context '下書きのイベントの場合' do
-  #       let(:status) { :draft }
-  #       it { is_expected.to permit_only_actions(%i[index]) }
-  #     end
+      context '下書きのイベントの場合' do
+        let(:status) { :draft }
+        it { is_expected.to permit_only_actions(%i[index]) }
+      end
 
-  #     context '公開中のイベントの場合' do
-  #       let(:status) { :published }
-  #       it { is_expected.to permit_only_actions(%i[index show]) }
-  #     end
+      context '公開中のイベントの場合' do
+        let(:status) { :published }
+        it { is_expected.to permit_only_actions(%i[index show]) }
+      end
 
-  #     context '終了したイベントの場合' do
-  #       let(:status) { :closed }
-  #       it { is_expected.to permit_only_actions(%i[index show]) }
-  #     end
-  #   end
-  # end
+      context '終了したイベントの場合' do
+        let(:status) { :closed }
+        it { is_expected.to permit_only_actions(%i[index show]) }
+      end
+    end
+  end
 end

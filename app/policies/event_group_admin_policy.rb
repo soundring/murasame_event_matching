@@ -2,28 +2,10 @@ class EventGroupAdminPolicy < ApplicationPolicy
   def index?
     admin_or_owner?
   end
-
-  def new?
-    admin_or_owner?
-  end
-
-  def create?
-    admin_or_owner?
-  end
+  alias new? index?
+  alias create? index?
 
   def destroy?
-    record.event_group.admin?(user) && !record.event_group.owner?(record.user)
-  end
-
-  private
-
-  def admin_or_owner?
-    event_group =
-      if record.respond_to?(:event_group)
-        record.event_group
-      elsif record.respond_to?(:proxy_association)
-        record.proxy_association.owner
-      end
-    event_group&.admin?(user)
+    group_admin? && !group_owner?(record.user)
   end
 end
