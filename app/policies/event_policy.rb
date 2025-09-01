@@ -4,36 +4,38 @@ class EventPolicy < ApplicationPolicy
   end
 
   def show?
-    if record.eventable.is_a?(EventGroup)
-      user.administered_groups.exists?(record.eventable_id) || record.status != 'draft'
+    if event_group
+      group_admin? || !record.draft?
     else
-      # TODO: 個人イベントの場合の処理を追加する
-      # record.eventable == user || record.status != 'draft'
+      record.eventable == user || !record.draft?
     end
   end
 
-  def new?
-    if record.eventable.is_a?(EventGroup)
-      user.administered_groups.exists?(record.eventable_id)
+  def manage?
+    if event_group
+      group_admin?
     else
-      # TODO: 個人イベントの場合の処理を追加する
-      # record.eventable == user
+      record.eventable == user
     end
   end
+  alias new? manage?
+  alias create? manage?
+  alias edit? manage?
+  alias update? manage?
+  alias destroy? manage?
 
-  def create?
-    new?
-  end
+  class Scope < ApplicationPolicy::Scope
+    def resolve
+      non_draft = scope.where.not(status: :draft)
+      return non_draft unless user
 
-  def edit?
-    new?
-  end
+        personal_events = scope.where(eventable: user)
+        admin_group_events = scope.where(
+          eventable_type: EventGroup.name,
+          eventable_id: user.administered_groups.select(:id)
+        )
 
-  def update?
-    new?
-  end
-
-  def destroy?
-    new?
+      non_draft.or(personal_events).or(admin_group_events)
+    end
   end
 end

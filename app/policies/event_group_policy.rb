@@ -2,32 +2,16 @@ class EventGroupPolicy < ApplicationPolicy
   def index?
     true
   end
-
-  def show?
-    index?
-  end
-
-  def new?
-    index?
-  end
-
-  def create?
-    index?
-  end
+  alias show? index?
+  alias new? index?
+  alias create? index?
 
   def edit?
-    user == record.user || record.admin?(user)
+    group_owner? || group_admin?
   end
-
-  def update?
-    edit?
-  end
+  alias update? edit?
 
   def destroy?
-    user == record.user
+    group_owner?
   end
-
-  # TODO: イベント作成機能を実装したらコメントアウトを外す
-  # def create_event?
-  # end
 end
